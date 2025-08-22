@@ -8,11 +8,11 @@ from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 
 from openai import OpenAI
-from agents import Agent, Message
+from agents import Agent
 
-from ..data.courts import COURTS, get_court_by_id, get_courts_by_type
-from ..data.user_preferences import user_preferences
-from ..booking.stc_client import stc_client, TimeSlot
+from src.data.courts import COURTS, get_court_by_id, get_courts_by_type
+from src.data.user_preferences import user_preferences
+from src.booking.stc_client import stc_client, TimeSlot
 
 
 @dataclass

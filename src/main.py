@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
-from .interface.gradio_app import create_app
+from src.interface.gradio_app import create_app
 
 
 def load_environment():
@@ -75,3 +75,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

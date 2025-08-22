@@ -6,7 +6,7 @@ import os
 import gradio as gr
 from typing import List, Tuple
 
-from ..agent.tennis_agent import TennisBookingAgent
+from src.agent.tennis_agent import TennisBookingAgent
 
 
 class TennisBookingInterface:
@@ -195,10 +195,26 @@ def create_app(openai_api_key: str) -> gr.Blocks:
     """Create and return the Gradio app."""
     interface = TennisBookingInterface(openai_api_key)
     return interface.create_interface()
+import gradio as gr
+
+def greet(name):
+    """Simple function that greets the user"""
+    return f"Hello, {name}! Welcome to Gradio!"
+
+# Create the Gradio interface
+demo = gr.Interface(
+    fn=greet,                    # Function to call
+    inputs="text",               # Input component type
+    outputs="text",              # Output component type
+    title="My First Gradio App", # App title
+    description="Enter your name and get a greeting!"
+)
+
 
 
 if __name__ == "__main__":
     # For testing - you would normally get this from environment
-    api_key = os.getenv("OPENAI_API_KEY", "your-api-key-here")
-    app = create_app(api_key)
-    app.launch(share=True)
+    # api_key = os.getenv("OPENAI_API_KEY", "your-api-key-here")
+    # app = create_app(api_key)
+    # app.launch(share=True)
+    demo.launch()
