@@ -72,72 +72,27 @@ class TennisBookingInterface:
             - "Brauche einen Platz für Doppel am Wochenende"
             """)
             
+            # Chat interface
+            chatbot = gr.Chatbot(
+                label="Chat mit Tennis Assistent",
+                height=500,
+                show_label=True,
+                container=True,
+                bubble_full_width=False
+            )
+            
             with gr.Row():
-                with gr.Column(scale=2):
-                    # Chat interface
-                    chatbot = gr.Chatbot(
-                        label="Chat mit Tennis Assistent",
-                        height=500,
-                        show_label=True,
-                        container=True,
-                        bubble_full_width=False
-                    )
-                    
-                    with gr.Row():
-                        # Text input
-                        msg = gr.Textbox(
-                            label="Nachricht eingeben",
-                            placeholder="z.B., Ich möchte morgen um 15 Uhr Tennis spielen",
-                            lines=2,
-                            scale=3
-                        )
-                        
-                        # Voice input
-                        voice_input = gr.Audio(
-                            label="Spracheingabe",
-                            type="microphone",
-                            scale=1
-                        )
-                    
-                    with gr.Row():
-                        submit_btn = gr.Button("Senden", variant="primary", size="lg")
-                        clear_btn = gr.Button("Chat löschen", variant="secondary")
+                # Text input
+                msg = gr.Textbox(
+                    label="Nachricht eingeben",
+                    placeholder="z.B., Ich möchte morgen um 15 Uhr Tennis spielen",
+                    lines=2,
+                    scale=3
+                )
                 
-                with gr.Column(scale=1):
-                    # Information panel
-                    gr.Markdown("""
-                    ### 📋 Verfügbare Plätze
-                    
-                    **Links (Tennisschule):**
-                    - Platz A: Aufschlagtrainingsplatz (nur Einzel)
-                    - Platz 1-6: Tennisschule (Platz 1-5 sind Mittelplätze)
-                    
-                    **Eingang rechts:**
-                    - Platz 7-9: Sandplätze (Platz 8 ist Mittelplatz)
-                    - Platz 10-12: Granulatplätze (Platz 11 ist Mittelplatz)
-                    
-                    **Mitte:**
-                    - T-Platz: vor dem Restaurant (nur Einzel)
-                    
-                    **Hinten:**
-                    - Platz 14-22: Sandplätze (Platz 15, 18, 21 sind Mittelplätze)
-                    - Platz 17: Wingfield
-                    
-                    ### 🎯 Tipps
-                    - Sei spezifisch bei Datum und Uhrzeit
-                    - Erwähne Platztyp-Vorlieben
-                    - Gib an ob Einzel oder Doppel
-                    """)
-                    
-                    # Quick action buttons
-                    gr.Markdown("### ⚡ Schnellaktionen")
-                    
-                    with gr.Row():
-                        today_btn = gr.Button("Heute", size="sm")
-                        tomorrow_btn = gr.Button("Morgen", size="sm")
-                    
-                    with gr.Row():
-                        clay_btn = gr.Button("Sandplätze", size="sm")
+            with gr.Row():
+                submit_btn = gr.Button("Senden", variant="primary", size="lg")
+                clear_btn = gr.Button("Chat löschen", variant="secondary")
             
             # Event handlers
             submit_btn.click(
@@ -156,37 +111,6 @@ class TennisBookingInterface:
                 lambda: ([], ""),
                 outputs=[chatbot, msg]
             )
-            
-            # Quick action buttons
-            today_btn.click(
-                lambda: ("Ich möchte heute Tennis spielen", []),
-                outputs=[msg, chatbot]
-            )
-            
-            tomorrow_btn.click(
-                lambda: ("Ich möchte morgen Tennis spielen", []),
-                outputs=[msg, chatbot]
-            )
-            
-            clay_btn.click(
-                lambda: ("Ich bevorzuge Sandplätze", []),
-                outputs=[msg, chatbot]
-            )
-            
-
-            
-            # Voice input processing (placeholder - would need speech-to-text)
-            def process_voice(audio):
-                if audio is None:
-                    return ""
-                # In a real implementation, you would use speech-to-text here
-                return "Spracheingabe empfangen (Sprach-zu-Text nicht implementiert)"
-            
-            voice_input.change(
-                process_voice,
-                inputs=[voice_input],
-                outputs=[msg]
-            )
         
         return interface
 
@@ -195,26 +119,10 @@ def create_app(openai_api_key: str) -> gr.Blocks:
     """Create and return the Gradio app."""
     interface = TennisBookingInterface(openai_api_key)
     return interface.create_interface()
-import gradio as gr
-
-def greet(name):
-    """Simple function that greets the user"""
-    return f"Hello, {name}! Welcome to Gradio!"
-
-# Create the Gradio interface
-demo = gr.Interface(
-    fn=greet,                    # Function to call
-    inputs="text",               # Input component type
-    outputs="text",              # Output component type
-    title="My First Gradio App", # App title
-    description="Enter your name and get a greeting!"
-)
-
 
 
 if __name__ == "__main__":
     # For testing - you would normally get this from environment
-    # api_key = os.getenv("OPENAI_API_KEY", "your-api-key-here")
-    # app = create_app(api_key)
-    # app.launch(share=True)
-    demo.launch()
+    api_key = os.getenv("OPENAI_API_KEY", "your-api-key-here")
+    app = create_app(api_key)
+    app.launch(share=True)
