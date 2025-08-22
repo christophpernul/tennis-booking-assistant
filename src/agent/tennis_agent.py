@@ -2,9 +2,10 @@
 Tennis booking AI agent that processes user requests and suggests available courts.
 """
 
+import asyncio
 from dataclasses import dataclass
 from openai import OpenAI
-from agents import Agent
+from agents import Agent, trace, Runner
 
 
 @dataclass
@@ -54,7 +55,7 @@ Platztypen: sand, granulat
 
 Antworte immer mit spezifischen Platzvorschlägen und Zeiten in einem klaren, prägnanten Format."""
     
-    def process_request(self, user_message: str) -> str:
+    async def _process_request(self, user_message: str) -> str:
         """
         Process a user's booking request and return suggestions.
         
@@ -65,5 +66,35 @@ Antworte immer mit spezifischen Platzvorschlägen und Zeiten in einem klaren, pr
             Response from the AI agent
         """
         # Send the message directly to the agent
-        response = self.agent.chat(user_message)
-        return response
+        with trace("Tennis Agent"):
+            response = await Runner.run(self.agent, user_message)
+        return response.final_output
+
+    def chat_with_agent(self, message: str, history: list[dict]) -> tuple[str, list[dict]]:
+        """
+        Process a chat message and return the agent's response.
+        
+        Args:
+            message: User's message
+            history: Chat history in messages format
+            
+        Returns:
+            Tuple of (response, updated_history)
+        """
+        if not message.strip():
+            return "", history
+        
+        # Process the message with the agent
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        try:
+            response = loop.run_until_complete(self._process_request(message))
+        finally:
+            loop.close()
+        
+        # Update history with messages format
+        history.append({"role": "user", "content": message})
+        history.append({"role": "assistant", "content": response})
+        
+        return "", history

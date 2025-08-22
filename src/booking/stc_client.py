@@ -12,7 +12,7 @@ from typing import Dict, List
 from constants import COURT_STC_ID_TO_INTERNAL_ID, COURT_INTERNAL_ID_TO_NAME, CourtAvailability, TimeSlot, CourtBookings
 
 
-
+# TODO: Use this as a tool for the agent
 
 class STCBookingClient:
     """Client for interacting with the STC eBuSy booking system."""
