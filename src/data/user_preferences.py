@@ -68,20 +68,12 @@ class UserPreferences:
 user_preferences = UserPreferences()
 
 # Add some sample user preferences
-# Laura - prefers courts 15-22, excludes courts A, 1-14, and T
-user_preferences.add_user_preference("Laura", ["court_15", "court_16", "court_17", "court_18", "court_19", "court_20", "court_21", "court_22"])
-user_preferences.add_user_court_type_preference("Laura", ["hard", "wingfield"])
-user_preferences.add_excluded_courts("Laura", ["court_a", "court_1", "court_2", "court_3", "court_4", "court_5", "court_6", "court_7", "court_8", "court_9", "court_10", "court_11", "court_12", "court_13", "court_14", "court_t"])
+# Laura - excludes courts A, 1-14, and T
+user_preferences.add_user_court_type_preference("Laura", ["sand"])
+user_preferences.add_excluded_courts("Laura", ["court_a", "court_1", "court_2", "court_3", "court_4", "court_5", "court_6", "court_7", "court_8", "court_9", "court_10", "court_11", "court_12", "court_14", "court_t"])
 
-# Christoph - prefers courts A, T, and 15-22, likes clay courts
-user_preferences.add_user_preference("Christoph", ["court_a", "court_t", "court_15", "court_16", "court_17", "court_18", "court_19", "court_20", "court_21", "court_22"])
-user_preferences.add_user_court_type_preference("Christoph", ["clay", "indoor", "hard", "wingfield"])
+# Christoph - excludes courts A, 1-14, and T
+user_preferences.add_excluded_courts("Christoph", ["court_7", "court_8", "court_9", "court_10", "court_11", "court_12"])
+user_preferences.add_user_court_type_preference("Christoph", ["sand"])
 
-# Sarah - prefers indoor courts
-user_preferences.add_user_preference("Sarah", ["court_4"])
-user_preferences.add_user_court_type_preference("Sarah", ["indoor"])
-
-# Mike - prefers hard courts
-user_preferences.add_user_preference("Mike", ["court_5", "court_6"])
-user_preferences.add_user_court_type_preference("Mike", ["hard"])
 

@@ -56,25 +56,26 @@ class TennisBookingAgent:
     
     def _get_system_message(self) -> str:
         """Get the system message for the AI agent."""
-        return """You are a helpful tennis court booking assistant for the Sport- und Tennis-Club München Süd.
+        return """Du bist ein hilfreicher Tennis-Buchungsassistent für den Sport- und Tennis-Club München Süd.
 
-Your role is to:
-1. Understand user booking requests (time, date, duration, preferences)
-2. Check court availability from the STC booking system
-3. Suggest available courts based on user preferences
-4. Provide alternative times if requested times are unavailable
-5. Give short, precise answers with clear court suggestions
+Deine Aufgabe ist es:
+1. Benutzer-Buchungsanfragen zu verstehen (Zeit, Datum, Dauer, Vorlieben)
+2. Platzverfügbarkeit im STC-Buchungssystem zu prüfen
+3. Verfügbare Plätze basierend auf Benutzervorlieben vorzuschlagen
+4. Alternative Zeiten anzubieten, wenn gewünschte Zeiten nicht verfügbar sind
+5. Kurze, präzise Antworten mit klaren Platzvorschlägen zu geben
 
-Available courts and their properties:
-- Platz A: Main building, clay court
-- Platz 1-9: Main building, clay courts (Platz 2 is a middle court)
-- Platz 10-12: Outdoor Granulat courts
-- T-Platz: Indoor facility, singles only
-- Platz 14-22: Outdoor hard courts (Platz 17 is Wingfield)
+Verfügbare Plätze und ihre Eigenschaften:
+- Platz A: links, Aufschlagtrainingsplatz, Ballmaschinenplatz (nur Einzel)
+- Platz 1-6: links, Tennisschule (Platz 1-5 sind Mittelplätze)
+- Platz 7-9: Eingang rechts, Sandplätze (Platz 8 ist Mittelplatz)
+- Platz 10-12: Eingang rechts, Granulatplätze (Platz 11 ist Mittelplatz)
+- T-Platz: Mitte, vor dem Restaurant (nur Einzel)
+- Platz 14-22: hinten, Sandplätze (Platz 15, 18, 21 sind Mittelplätze, Platz 17 ist Wingfield)
 
-Court types: clay, granulat, indoor, hard, wingfield
+Platztypen: sand, granulat
 
-Always respond with specific court suggestions and times in a clear, concise format."""
+Antworte immer mit spezifischen Platzvorschlägen und Zeiten in einem klaren, prägnanten Format."""
     
     def process_request(self, user_message: str) -> str:
         """
@@ -90,7 +91,7 @@ Always respond with specific court suggestions and times in a clear, concise for
         request = self._parse_user_request(user_message)
         
         if not request.target_date:
-            return "Please specify a date for your tennis booking."
+            return "Bitte gib ein Datum für deine Tennisbuchung an."
         
         # Get available slots
         available_slots = stc_client.get_available_slots(
@@ -189,11 +190,9 @@ Always respond with specific court suggestions and times in a clear, concise for
         
         # Extract court preferences
         court_keywords = {
-            "clay": ["clay", "red clay"],
-            "indoor": ["indoor", "inside", "t-platz"],
-            "hard": ["hard", "outdoor"],
+            "sand": ["sand", "clay", "red clay", "sandplatz"],
             "granulat": ["granulat", "granule"],
-            "wingfield": ["wingfield", "wing field"],
+            "wingfield": ["wingfield", "wing field", "wingfield-platz"],
         }
         
         request.preferred_court_types = []
@@ -202,9 +201,9 @@ Always respond with specific court suggestions and times in a clear, concise for
                 request.preferred_court_types.append(court_type)
         
         # Extract singles/doubles preference
-        if "single" in message.lower():
+        if "single" in message.lower() or "einzel" in message.lower():
             request.is_singles = True
-        elif "double" in message.lower():
+        elif "double" in message.lower() or "doppel" in message.lower():
             request.is_doubles = True
         
         return request
@@ -281,16 +280,16 @@ Always respond with specific court suggestions and times in a clear, concise for
             if available_slots:
                 suggestions = self._create_booking_suggestions(request, available_slots)
                 if suggestions:
-                    return f"No availability for {request.target_date.strftime('%d.%m.%Y')}. Here are alternatives for {alt_date.strftime('%d.%m.%Y')}:\n\n" + self._format_suggestions(suggestions[:5], request)
+                    return f"Keine Verfügbarkeit für {request.target_date.strftime('%d.%m.%Y')}. Hier sind Alternativen für {alt_date.strftime('%d.%m.%Y')}:\n\n" + self._format_suggestions(suggestions[:5], request)
         
-        return f"Sorry, no courts available for {request.target_date.strftime('%d.%m.%Y')} or the next few days. Please try a different date."
+        return f"Entschuldigung, keine Plätze verfügbar für {request.target_date.strftime('%d.%m.%Y')} oder die nächsten Tage. Bitte versuche ein anderes Datum."
     
     def _format_suggestions(self, suggestions: List[BookingSuggestion], request: BookingRequest) -> str:
         """Format booking suggestions into a readable response."""
         if not suggestions:
-            return "No suitable courts available for your request."
+            return "Keine passenden Plätze für deine Anfrage verfügbar."
         
-        response = f"🎾 Available courts for {request.target_date.strftime('%d.%m.%Y')}:\n\n"
+        response = f"🎾 Verfügbare Plätze für {request.target_date.strftime('%d.%m.%Y')}:\n\n"
         
         for i, suggestion in enumerate(suggestions, 1):
             preferred_marker = "⭐ " if suggestion.is_preferred else ""
@@ -299,6 +298,6 @@ Always respond with specific court suggestions and times in a clear, concise for
             response += f"   🕐 {suggestion.start_time} - {suggestion.end_time}\n"
             response += f"   ⏱️ {suggestion.duration}\n\n"
         
-        response += "💡 Tip: Courts marked with ⭐ match your preferences."
+        response += "💡 Tipp: Plätze mit ⭐ entsprechen deinen Vorlieben."
         
         return response

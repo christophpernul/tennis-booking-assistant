@@ -79,11 +79,12 @@ The assistant integrates with the Sport- und Tennis-Club München Süd (STC) boo
 **Booking System URL:** https://siemens-tennisclub-muenchenv8.ebusy.de/lite-module/891
 
 **Available Courts:**
-- **Platz A:** Main building, clay court
-- **Platz 1-9:** Main building, clay courts (Platz 2 is a middle court)
-- **Platz 10-12:** Outdoor Granulat courts
-- **T-Platz:** Indoor facility, singles only
-- **Platz 14-22:** Outdoor hard courts (Platz 17 is Wingfield)
+- **Platz A:** links, Aufschlagtrainingsplatz, Ballmaschinenplatz (nur Einzel)
+- **Platz 1-6:** links, Tennisschule (Platz 1-5 sind Mittelplätze)
+- **Platz 7-9:** Eingang rechts, Sandplätze (Platz 8 ist Mittelplatz)
+- **Platz 10-12:** Eingang rechts, Granulatplätze (Platz 11 ist Mittelplatz)
+- **T-Platz:** Mitte, vor dem Restaurant (nur Einzel)
+- **Platz 14-22:** hinten, Sandplätze (Platz 15, 18, 21 sind Mittelplätze, Platz 17 ist Wingfield)
 
 The system automatically:
 - Fetches current availability from the STC booking system

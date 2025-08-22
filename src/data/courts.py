@@ -24,87 +24,87 @@ COURTS = [
     Court(
         id="court_a",
         name="Platz A",
-        location="Main building, ground floor",
+        location="links, Aufschlagtrainingsplatz, Ballmaschinenplatz",
         is_middle_court=False,
         is_singles_only=True,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_1", 
         name="Platz 1",
-        location="Main building, ground floor",
-        is_middle_court=False,
+        location="links",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_2",
         name="Platz 2", 
-        location="Main building, ground floor",
+        location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_3",
         name="Platz 3",
-        location="Main building, ground floor",
-        is_middle_court=False,
+        location="links, Tennisschule",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_4",
         name="Platz 4",
-        location="Main building, ground floor",
-        is_middle_court=False,
+        location="links, Tennisschule",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_5",
         name="Platz 5",
-        location="Main building, ground floor",
-        is_middle_court=False,
+        location="links, Tennisschule",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_6",
         name="Platz 6",
-        location="Main building, ground floor",
+        location="links, Tennisschule",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_7",
         name="Platz 7",
-        location="Main building, ground floor",
+        location="Eingang rechts, Sandplätze",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="hard-clay"
+        court_type="sand"
     ),
     Court(
         id="court_8",
         name="Platz 8",
-        location="Main building, ground floor",
-        is_middle_court=False,
+        location="Eingang rechts, Sandplätze",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="hard-clay"
+        court_type="sand"
     ),
     Court(
         id="court_9",
         name="Platz 9",
-        location="Main building, ground floor",
+        location="Eingang rechts, Sandplätze",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="hard-clay"
+        court_type="sand"
     ),
     Court(
         id="court_10",
         name="Platz 10",
-        location="Outdoor area, Granulat courts",
+        location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
         is_singles_only=False,
         court_type="granulat"
@@ -112,15 +112,15 @@ COURTS = [
     Court(
         id="court_11",
         name="Platz 11",
-        location="Outdoor area, Granulat courts",
-        is_middle_court=False,
+        location="Eingang rechts, Granulatplätze",
+        is_middle_court=True,
         is_singles_only=False,
         court_type="granulat"
     ),
     Court(
         id="court_12",
         name="Platz 12",
-        location="Outdoor area, Granulat courts",
+        location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
         is_singles_only=False,
         court_type="granulat"
@@ -128,83 +128,83 @@ COURTS = [
     Court(
         id="court_t",
         name="T-Platz",
-        location="Indoor facility",
+        location="Mitte, vor dem Restaurant",
         is_middle_court=False,
-        is_singles_only=False,
-        court_type="clay"
+        is_singles_only=True,
+        court_type="sand"
     ),
     Court(
         id="court_14",
         name="Platz 14",
-        location="Outdoor area, back courts",
+        location="hinten rechts, beim Park",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_15",
         name="Platz 15",
-        location="Outdoor area, back courts",
-        is_middle_court=False,
+        location="hinten rechts",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_16",
         name="Platz 16",
-        location="Outdoor area, back courts",
+        location="hinten rechts",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_17",
         name="Platz 17",
-        location="Outdoor area, Wingfield courts",
+        location="hinten Mitte, Wingfield",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="clay",
+        court_type="sand",
         is_wingfield=True
     ),
     Court(
         id="court_18",
         name="Platz 18",
-        location="Outdoor area, back courts",
-        is_middle_court=False,
+        location="hinten Mitte",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_19",
         name="Platz 19",
-        location="Outdoor area, back courts",
+        location="hinten Mitte",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_20",
         name="Platz 20",
-        location="Outdoor area, back courts",
+        location="hinten links",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_21",
         name="Platz 21",
-        location="Outdoor area, back courts",
-        is_middle_court=False,
+        location="hinten links",
+        is_middle_court=True,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
     Court(
         id="court_22",
         name="Platz 22",
-        location="Outdoor area, back courts",
+        location="hinten links",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="clay"
+        court_type="sand"
     ),
 ]
 

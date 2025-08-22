@@ -41,7 +41,7 @@ class TennisBookingInterface:
     def create_interface(self) -> gr.Blocks:
         """Create the Gradio interface."""
         with gr.Blocks(
-            title="Tennis Booking Assistant",
+            title="Tennis Buchungsassistent",
             theme=gr.themes.Soft(),
             css="""
             .chat-container {
@@ -59,24 +59,24 @@ class TennisBookingInterface:
         ) as interface:
             
             gr.Markdown("""
-            # 🎾 Tennis Booking Assistant
+            # 🎾 Tennis Buchungsassistent
             
             **Sport- und Tennis-Club München Süd**
             
-            Ask me to help you find and book tennis courts! I can check availability and suggest the best options based on your preferences.
+            Frag mich, um dir bei der Suche und Buchung von Tennisplätzen zu helfen! Ich kann die Verfügbarkeit prüfen und basierend auf deinen Vorlieben die besten Optionen vorschlagen.
             
-            **Example requests:**
-            - "I want to play tennis tomorrow at 3pm"
-            - "My name is John, I prefer clay courts"
-            - "Looking for indoor courts for singles on Friday"
-            - "Need a court for doubles this weekend"
+            **Beispielanfragen:**
+            - "Ich möchte morgen um 15 Uhr Tennis spielen"
+            - "Mein Name ist John, ich bevorzuge Sandplätze"
+            - "Suche nach Hallenplätzen für Einzel am Freitag"
+            - "Brauche einen Platz für Doppel am Wochenende"
             """)
             
             with gr.Row():
                 with gr.Column(scale=2):
                     # Chat interface
                     chatbot = gr.Chatbot(
-                        label="Chat with Tennis Assistant",
+                        label="Chat mit Tennis Assistent",
                         height=500,
                         show_label=True,
                         container=True,
@@ -86,57 +86,58 @@ class TennisBookingInterface:
                     with gr.Row():
                         # Text input
                         msg = gr.Textbox(
-                            label="Type your message",
-                            placeholder="e.g., I want to play tennis tomorrow at 3pm",
+                            label="Nachricht eingeben",
+                            placeholder="z.B., Ich möchte morgen um 15 Uhr Tennis spielen",
                             lines=2,
                             scale=3
                         )
                         
                         # Voice input
                         voice_input = gr.Audio(
-                            label="Voice Input",
+                            label="Spracheingabe",
                             type="microphone",
                             scale=1
                         )
                     
                     with gr.Row():
-                        submit_btn = gr.Button("Send", variant="primary", size="lg")
-                        clear_btn = gr.Button("Clear Chat", variant="secondary")
+                        submit_btn = gr.Button("Senden", variant="primary", size="lg")
+                        clear_btn = gr.Button("Chat löschen", variant="secondary")
                 
                 with gr.Column(scale=1):
                     # Information panel
                     gr.Markdown("""
-                    ### 📋 Available Courts
+                    ### 📋 Verfügbare Plätze
                     
-                    **Main Building (Clay):**
-                    - Platz A, Platz 1-9
-                    - Platz 2 is a middle court
+                    **Links (Tennisschule):**
+                    - Platz A: Aufschlagtrainingsplatz (nur Einzel)
+                    - Platz 1-6: Tennisschule (Platz 1-5 sind Mittelplätze)
                     
-                    **Outdoor Courts:**
-                    - Platz 10-12 (Granulat)
-                    - Platz 14-22 (Hard)
-                    - Platz 17 (Wingfield)
+                    **Eingang rechts:**
+                    - Platz 7-9: Sandplätze (Platz 8 ist Mittelplatz)
+                    - Platz 10-12: Granulatplätze (Platz 11 ist Mittelplatz)
                     
-                    **Indoor:**
-                    - T-Platz (Singles only)
+                    **Mitte:**
+                    - T-Platz: vor dem Restaurant (nur Einzel)
                     
-                    ### 🎯 Tips
-                    - Be specific about date and time
-                    - Mention court type preferences
-                    - Specify singles or doubles
-                    - I'll remember your preferences!
+                    **Hinten:**
+                    - Platz 14-22: Sandplätze (Platz 15, 18, 21 sind Mittelplätze)
+                    - Platz 17: Wingfield
+                    
+                    ### 🎯 Tipps
+                    - Sei spezifisch bei Datum und Uhrzeit
+                    - Erwähne Platztyp-Vorlieben
+                    - Gib an ob Einzel oder Doppel
                     """)
                     
                     # Quick action buttons
-                    gr.Markdown("### ⚡ Quick Actions")
+                    gr.Markdown("### ⚡ Schnellaktionen")
                     
                     with gr.Row():
-                        today_btn = gr.Button("Today", size="sm")
-                        tomorrow_btn = gr.Button("Tomorrow", size="sm")
+                        today_btn = gr.Button("Heute", size="sm")
+                        tomorrow_btn = gr.Button("Morgen", size="sm")
                     
                     with gr.Row():
-                        clay_btn = gr.Button("Clay Courts", size="sm")
-                        indoor_btn = gr.Button("Indoor", size="sm")
+                        clay_btn = gr.Button("Sandplätze", size="sm")
             
             # Event handlers
             submit_btn.click(
@@ -158,31 +159,28 @@ class TennisBookingInterface:
             
             # Quick action buttons
             today_btn.click(
-                lambda: ("I want to play tennis today", []),
+                lambda: ("Ich möchte heute Tennis spielen", []),
                 outputs=[msg, chatbot]
             )
             
             tomorrow_btn.click(
-                lambda: ("I want to play tennis tomorrow", []),
+                lambda: ("Ich möchte morgen Tennis spielen", []),
                 outputs=[msg, chatbot]
             )
             
             clay_btn.click(
-                lambda: ("I prefer clay courts", []),
+                lambda: ("Ich bevorzuge Sandplätze", []),
                 outputs=[msg, chatbot]
             )
             
-            indoor_btn.click(
-                lambda: ("I want an indoor court", []),
-                outputs=[msg, chatbot]
-            )
+
             
             # Voice input processing (placeholder - would need speech-to-text)
             def process_voice(audio):
                 if audio is None:
                     return ""
                 # In a real implementation, you would use speech-to-text here
-                return "Voice input received (speech-to-text not implemented)"
+                return "Spracheingabe empfangen (Sprach-zu-Text nicht implementiert)"
             
             voice_input.change(
                 process_voice,

@@ -48,8 +48,8 @@ def test_court_data():
         print(f"✅ Court lookup works: {court.name}")
     
     # Test court type filtering
-    clay_courts = get_courts_by_type("clay")
-    print(f"✅ Found {len(clay_courts)} clay courts")
+    sand_courts = get_courts_by_type("sand")
+    print(f"✅ Found {len(sand_courts)} sand courts")
     
     # Test Wingfield courts
     wingfield_courts = get_wingfield_courts()
