@@ -14,15 +14,15 @@ class TennisBookingInterface:
     
     def __init__(self, openai_api_key: str):
         self.agent = TennisBookingAgent(openai_api_key)
-        self.chat_history: List[Tuple[str, str]] = []
+        self.chat_history: List[dict] = []
     
-    def chat_with_agent(self, message: str, history: List[List[str]]) -> Tuple[str, List[List[str]]]:
+    def chat_with_agent(self, message: str, history: List[dict]) -> Tuple[str, List[dict]]:
         """
         Process a chat message and return the agent's response.
         
         Args:
             message: User's message
-            history: Chat history
+            history: Chat history in messages format
             
         Returns:
             Tuple of (response, updated_history)
@@ -33,8 +33,9 @@ class TennisBookingInterface:
         # Process the message with the agent
         response = self.agent.process_request(message)
         
-        # Update history
-        history.append([message, response])
+        # Update history with messages format
+        history.append({"role": "user", "content": message})
+        history.append({"role": "assistant", "content": response})
         
         return "", history
     
@@ -78,7 +79,7 @@ class TennisBookingInterface:
                 height=500,
                 show_label=True,
                 container=True,
-                bubble_full_width=False
+                type="messages"
             )
             
             with gr.Row():
