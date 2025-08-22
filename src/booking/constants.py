@@ -1,0 +1,85 @@
+from datetime import datetime, date
+from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass
+
+COURT_STC_ID_TO_INTERNAL_ID = {
+   1472: 1,
+   1473: 2,
+   1474: 3,
+   1475: 4,
+   1476: 5,
+   1477: 6,
+   1478: 7,
+   1479: 8,
+   1480: 9,
+   1481: 10,
+   1482: 11,
+   1483: 12,
+   1484: 13,
+   1485: 14,
+   1486: 15,
+   1487: 16,
+   1488: 17,
+   1489: 18,
+   1490: 0,
+   1491: 19,
+   1492: 20,
+   1493: 21,
+   1494: 22,
+}
+
+COURT_INTERNAL_ID_TO_NAME = {
+   0: "Platz A",
+   1: "Platz 1",
+   2: "Platz 2",
+   3: "Platz 3",
+   4: "Platz 4",
+   5: "Platz 5",
+   6: "Platz 6",
+   7: "Platz 7",
+   8: "Platz 8",
+   9: "Platz 9",
+   10: "Platz 10",
+   11: "Platz 11",
+   12: "Platz 12",
+   13: "Platz T",
+   14: "Platz 14",
+   15: "Platz 15",
+   16: "Platz 16",
+   17: "Platz 17",
+   18: "Platz 18",
+   19: "Platz 19",
+   20: "Platz 20",
+   21: "Platz 21",
+   22: "Platz 22",
+}
+
+@dataclass
+class TimeSlot:
+    """Represents a time slot for booking."""
+    start_time: str
+    end_time: str
+    is_available: bool
+    court_id: str
+    court_name: str
+
+
+@dataclass
+class CourtAvailability:
+    """Represents court availability for a specific date."""
+    date: date
+    court_id: str
+    court_name: str
+    time_slots: List[TimeSlot]
+
+@dataclass
+class CourtReservation:
+    """Represents a single booking / reservation of a court."""
+    date: date
+    fromTime: str
+    toTome: str
+
+@dataclass
+class CourtBookings:
+    """Represents all court reservations for a court on a day."""
+    court_name: List[CourtReservation]
