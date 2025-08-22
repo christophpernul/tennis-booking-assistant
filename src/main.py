@@ -17,10 +17,10 @@ def load_environment():
     env_file = project_root / ".env"
     
     if env_file.exists():
-        load_dotenv(env_file)
+        load_dotenv(env_file, override=True)
     else:
         # Try to load from current directory
-        load_dotenv()
+        load_dotenv(override=True)
 
 
 def check_requirements():

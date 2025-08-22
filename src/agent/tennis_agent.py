@@ -47,11 +47,10 @@ class TennisBookingAgent:
     """AI agent for tennis court booking assistance."""
     
     def __init__(self, openai_api_key: str):
-        self.client = OpenAI(api_key=openai_api_key)
         self.agent = Agent(
             name="tennis_booking_assistant",
-            llm=self.client,
-            system_message=self._get_system_message()
+            model="gpt-4o-mini",
+            instructions=self._get_system_message()
         )
     
     def _get_system_message(self) -> str:
