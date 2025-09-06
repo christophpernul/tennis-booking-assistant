@@ -26,6 +26,8 @@ class BookingSuggestion:
 @function_tool
 def get_booking_tool(date):
     """Get the STC booking client instance."""
+    # TODO: The date must be inferred by the agent. Make a sub agent for fetching the booking that infers
+    # the date from the main agent's request.
     booking_client = STCBookingClient()
     return booking_client.get_court_bookings(target_date=date)
 
