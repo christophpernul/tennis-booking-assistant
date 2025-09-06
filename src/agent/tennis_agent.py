@@ -5,7 +5,9 @@ Tennis booking AI agent that processes user requests and suggests available cour
 import asyncio
 from dataclasses import dataclass
 from openai import OpenAI
-from agents import Agent, trace, Runner
+from agents import Agent, trace, Runner, function_tool
+
+from src.booking.stc_client import STCBookingClient
 
 
 @dataclass
@@ -21,6 +23,12 @@ class BookingSuggestion:
     duration: str
     is_preferred: bool = False
 
+@function_tool
+def get_booking_tool(date):
+    """Get the STC booking client instance."""
+    booking_client = STCBookingClient()
+    return booking_client.get_court_bookings(target_date=date)
+
 
 class TennisBookingAgent:
     """AI agent for tennis court booking assistance."""
@@ -29,8 +37,11 @@ class TennisBookingAgent:
         self.agent = Agent(
             name="tennis_booking_assistant",
             model="gpt-4o-mini",
-            instructions=self._get_system_message()
+            instructions=self._get_system_message(),
+            tools=[get_booking_tool],
         )
+
+
     
     def _get_system_message(self) -> str:
         """Get the system message for the AI agent."""

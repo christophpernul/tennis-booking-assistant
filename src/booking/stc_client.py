@@ -9,7 +9,7 @@ from collections import defaultdict
 from datetime import datetime, date
 from typing import Dict, List
 
-from constants import COURT_STC_ID_TO_INTERNAL_ID, COURT_INTERNAL_ID_TO_NAME, CourtAvailability, TimeSlot, CourtBookings
+from src.booking.constants import COURT_STC_ID_TO_INTERNAL_ID, COURT_INTERNAL_ID_TO_NAME, CourtAvailability, TimeSlot, CourtBookings
 
 
 # TODO: Use this as a tool for the agent
@@ -23,7 +23,7 @@ class STCBookingClient:
         self.session.headers.update({
             'Accept': 'application/json',
         })
-    
+
     def get_court_bookings(self, target_date: date) -> List[CourtAvailability]:
         """
         Fetch court availability for a specific date.
