@@ -7,7 +7,7 @@ import json
 import requests
 from collections import defaultdict
 from datetime import datetime, date
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from src.booking.constants import COURT_STC_ID_TO_INTERNAL_ID, COURT_INTERNAL_ID_TO_NAME, CourtAvailability, TimeSlot, CourtBookings
 
@@ -24,7 +24,7 @@ class STCBookingClient:
             'Accept': 'application/json',
         })
 
-    def get_court_bookings(self, target_date: date) -> List[CourtAvailability]:
+    def get_court_bookings(self, target_date: Union[date, str]) -> List[CourtAvailability]:
         """
         Fetch court availability for a specific date.
         
@@ -35,7 +35,14 @@ class STCBookingClient:
             List of court availability data
         """
         # Format date as DD/MM/YYYY for the URL
-        date_str = target_date.strftime("%m/%d/%Y")
+        if not isinstance(target_date, str):
+            try:
+                date_str = target_date.strftime("%m/%d/%Y")
+            except ValueError:
+                raise("Invalid date format. Please provide a date object or a string in 'MM/DD/YYYY' format.")
+        else:
+            # TODO: Add validation for input format!
+            date_str = target_date
         url = f"{self.base_url}/lite-module/891?timestamp=&currentDate={date_str}"
         
         try:
@@ -45,6 +52,7 @@ class STCBookingClient:
             print(f"Error fetching availability: {e}")
             return []
         court_bookings = self._parse_court_bookings(data=json.loads(response.content))
+        print(f"Fetched bookings for {date_str}: {court_bookings}")
         return court_bookings
     
     def convert_court_id(self, data: Dict[str, List[Dict]]) -> Dict[str, List[Dict]]:
@@ -97,7 +105,6 @@ class STCBookingClient:
             # Sort bookings by fromTime for better readability
             sorted_bookings = sorted(bookings, key=lambda x: x['fromTime'])
             result[court_id] = sorted_bookings
-        
         return self.convert_court_id(result)
     
     # def get_available_slots(self, target_date: date, start_time: str = None, end_time: str = None) -> List[TimeSlot]:
@@ -132,6 +139,7 @@ class STCBookingClient:
 
 
 # Global instance for easy access
-stc_client = STCBookingClient()
-bookings = stc_client.get_court_bookings(date.today())
-print(bookings)
+if __name__ == "__main__":
+    stc_client = STCBookingClient()
+    bookings = stc_client.get_court_bookings(date.today())
+    print(bookings)

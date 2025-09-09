@@ -16,7 +16,7 @@ def test_imports():
     print("🔍 Testing imports...")
     
     try:
-        from data.courts import COURTS, get_court_by_id
+        from data.courts import COURT_ATTRIBUTES, get_court_by_id
         print("✅ Courts module imported successfully")
         
         from data.user_preferences import user_preferences
@@ -38,9 +38,9 @@ def test_court_data():
     """Test court data functionality."""
     print("\n🎾 Testing court data...")
     
-    from data.courts import COURTS, get_court_by_id, get_courts_by_type, get_wingfield_courts
+    from data.courts import COURT_ATTRIBUTES, get_court_by_id, get_courts_by_type, get_wingfield_courts
     
-    print(f"✅ Found {len(COURTS)} courts")
+    print(f"✅ Found {len(COURT_ATTRIBUTES)} courts")
     
     # Test court lookup
     court = get_court_by_id("court_1")

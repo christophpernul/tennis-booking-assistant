@@ -18,9 +18,8 @@ class Court:
     is_wingfield: bool = False  # Whether the court is a Wingfield court
     is_available: bool = False  # Current availability status
 
-
 # Court database based on STC eBuSy system
-COURTS = [
+COURT_ATTRIBUTES = [
     Court(
         id="court_a",
         name="Platz A",
@@ -211,7 +210,7 @@ COURTS = [
 
 def get_court_by_id(court_id: str) -> Optional[Court]:
     """Get a court by its ID."""
-    for court in COURTS:
+    for court in COURT_ATTRIBUTES:
         if court.id == court_id:
             return court
     return None
@@ -219,24 +218,24 @@ def get_court_by_id(court_id: str) -> Optional[Court]:
 
 def get_available_courts() -> List[Court]:
     """Get all available courts."""
-    return [court for court in COURTS if court.is_available]
+    return [court for court in COURT_ATTRIBUTES if court.is_available]
 
 
 def get_courts_by_type(court_type: str) -> List[Court]:
     """Get courts by type (e.g., 'clay', 'hard', 'indoor')."""
-    return [court for court in COURTS if court.court_type.lower() == court_type.lower()]
+    return [court for court in COURT_ATTRIBUTES if court.court_type.lower() == court_type.lower()]
 
 
 def get_middle_courts() -> List[Court]:
     """Get all middle courts."""
-    return [court for court in COURTS if court.is_middle_court]
+    return [court for court in COURT_ATTRIBUTES if court.is_middle_court]
 
 
 def get_singles_courts() -> List[Court]:
     """Get courts that are singles only."""
-    return [court for court in COURTS if court.is_singles_only]
+    return [court for court in COURT_ATTRIBUTES if court.is_singles_only]
 
 
 def get_wingfield_courts() -> List[Court]:
     """Get courts that are Wingfield courts."""
-    return [court for court in COURTS if court.is_wingfield]
+    return [court for court in COURT_ATTRIBUTES if court.is_wingfield]

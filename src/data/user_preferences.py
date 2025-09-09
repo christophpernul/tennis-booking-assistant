@@ -64,16 +64,16 @@ class UserPreferences:
         return court_id in excluded_courts
 
 
-# Global instance
-user_preferences = UserPreferences()
+def set_user_preferences() -> UserPreferences:
+    user_preferences = UserPreferences()
 
-# Add some sample user preferences
-# Laura - excludes courts A, 1-14, and T
-user_preferences.add_user_court_type_preference("Laura", ["sand"])
-user_preferences.add_excluded_courts("Laura", ["court_a", "court_1", "court_2", "court_3", "court_4", "court_5", "court_6", "court_7", "court_8", "court_9", "court_10", "court_11", "court_12", "court_14", "court_t"])
+    # Laura - excludes courts A, 1-14, and T
+    user_preferences.add_user_court_type_preference("Laura", ["sand"])
+    user_preferences.add_excluded_courts("Laura", ["court_a", "court_1", "court_2", "court_3", "court_4", "court_5", "court_6", "court_7", "court_8", "court_9", "court_10", "court_11", "court_12", "court_14", "court_t"])
 
-# Christoph - excludes courts A, 1-14, and T
-user_preferences.add_excluded_courts("Christoph", ["court_7", "court_8", "court_9", "court_10", "court_11", "court_12"])
-user_preferences.add_user_court_type_preference("Christoph", ["sand"])
+    # Christoph - excludes courts A, 1-14, and T
+    user_preferences.add_excluded_courts("Christoph", ["court_7", "court_8", "court_9", "court_10", "court_11", "court_12"])
+    user_preferences.add_user_court_type_preference("Christoph", ["sand"])
+    return user_preferences
 
 
