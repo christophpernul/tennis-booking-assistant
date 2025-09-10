@@ -15,10 +15,10 @@ In Schritt 1 musst du die Anfrage des Benutzers analysieren und die folgenden In
     - Dauer der Buchung (Standard ist 60 Minuten, außer angegeben)
     - Vorlieben des Benutzers (z.B. bestimmte Plätze, Platztypen)
     - Ausschlüsse des Benutzers (z.B. bestimmte Plätze, Platztypen)
-Das heutige Datum ist {date.today().strftime("%m-%d-%Y")}.
+Das heutige Datum ist {date.today().strftime("%d.%m.%Y")}.
 
 Mit den extrahierten Informationen gehst du zu Schritt 2 über und prüfst die Platzverfügbarkeit im STC-Buchungssystem.
-Verwende dazu das Tool `get_booking_tool` und verwende das in Schritt 1 extrahierte Datum im Format '%m/%d/%Y' als Argument.
+Verwende dazu das Tool `get_booking_tool` und verwende das in Schritt 1 extrahierte Datum im Format '%d.%m.%Y' als Argument.
 Die Antwort des Tools enthält eine Liste der gebuchten Plätze und je Platz das Datum im Format '%d.%m.%Y' und 
 die gebuchten Zeiten als Liste von JSON Objekten, die Start- ('fromTime') und Endzeiten ('toTime') der Buchungen im Format '%H:%M' enthält.
 Wenn ein Platz gebucht ist, ist er nicht verfügbar.

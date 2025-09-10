@@ -9,7 +9,7 @@ from typing import List, Optional
 @dataclass
 class Court:
     """Represents a tennis court with its properties."""
-    id: str
+    id: int
     name: str
     location: str  # Location of the court in the club
     is_middle_court: bool  # Whether the court is a middle court
@@ -21,7 +21,7 @@ class Court:
 # Court database based on STC eBuSy system
 COURT_ATTRIBUTES = [
     Court(
-        id="court_a",
+        id=0,
         name="Platz A",
         location="links, Aufschlagtrainingsplatz, Ballmaschinenplatz",
         is_middle_court=False,
@@ -29,7 +29,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_1", 
+        id=1,
         name="Platz 1",
         location="links",
         is_middle_court=True,
@@ -37,7 +37,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_2",
+        id=2,
         name="Platz 2", 
         location="links, Tennisschule",
         is_middle_court=True,
@@ -45,7 +45,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_3",
+        id=3,
         name="Platz 3",
         location="links, Tennisschule",
         is_middle_court=True,
@@ -53,7 +53,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_4",
+        id=4,
         name="Platz 4",
         location="links, Tennisschule",
         is_middle_court=True,
@@ -61,7 +61,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_5",
+        id=5,
         name="Platz 5",
         location="links, Tennisschule",
         is_middle_court=True,
@@ -69,7 +69,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_6",
+        id=6,
         name="Platz 6",
         location="links, Tennisschule",
         is_middle_court=False,
@@ -77,7 +77,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_7",
+        id=7,
         name="Platz 7",
         location="Eingang rechts, Sandplätze",
         is_middle_court=False,
@@ -85,7 +85,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_8",
+        id=8,
         name="Platz 8",
         location="Eingang rechts, Sandplätze",
         is_middle_court=True,
@@ -93,7 +93,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_9",
+        id=9,
         name="Platz 9",
         location="Eingang rechts, Sandplätze",
         is_middle_court=False,
@@ -101,7 +101,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_10",
+        id=10,
         name="Platz 10",
         location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
@@ -109,7 +109,7 @@ COURT_ATTRIBUTES = [
         court_type="granulat"
     ),
     Court(
-        id="court_11",
+        id=11,
         name="Platz 11",
         location="Eingang rechts, Granulatplätze",
         is_middle_court=True,
@@ -117,7 +117,7 @@ COURT_ATTRIBUTES = [
         court_type="granulat"
     ),
     Court(
-        id="court_12",
+        id=12,
         name="Platz 12",
         location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
@@ -125,7 +125,7 @@ COURT_ATTRIBUTES = [
         court_type="granulat"
     ),
     Court(
-        id="court_t",
+        id=13,
         name="T-Platz",
         location="Mitte, vor dem Restaurant",
         is_middle_court=False,
@@ -133,7 +133,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_14",
+        id=14,
         name="Platz 14",
         location="hinten rechts, beim Park",
         is_middle_court=False,
@@ -141,7 +141,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_15",
+        id=15,
         name="Platz 15",
         location="hinten rechts",
         is_middle_court=True,
@@ -149,7 +149,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_16",
+        id=16,
         name="Platz 16",
         location="hinten rechts",
         is_middle_court=False,
@@ -157,7 +157,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_17",
+        id=17,
         name="Platz 17",
         location="hinten Mitte, Wingfield",
         is_middle_court=False,
@@ -166,7 +166,7 @@ COURT_ATTRIBUTES = [
         is_wingfield=True
     ),
     Court(
-        id="court_18",
+        id=18,
         name="Platz 18",
         location="hinten Mitte",
         is_middle_court=True,
@@ -174,7 +174,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_19",
+        id=19,
         name="Platz 19",
         location="hinten Mitte",
         is_middle_court=False,
@@ -182,7 +182,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_20",
+        id=20,
         name="Platz 20",
         location="hinten links",
         is_middle_court=False,
@@ -190,7 +190,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_21",
+        id=21,
         name="Platz 21",
         location="hinten links",
         is_middle_court=True,
@@ -198,7 +198,7 @@ COURT_ATTRIBUTES = [
         court_type="sand"
     ),
     Court(
-        id="court_22",
+        id=22,
         name="Platz 22",
         location="hinten links",
         is_middle_court=False,
@@ -208,7 +208,7 @@ COURT_ATTRIBUTES = [
 ]
 
 
-def get_court_by_id(court_id: str) -> Optional[Court]:
+def get_court_by_id(court_id: int) -> Optional[Court]:
     """Get a court by its ID."""
     for court in COURT_ATTRIBUTES:
         if court.id == court_id:

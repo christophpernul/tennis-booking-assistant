@@ -54,6 +54,10 @@ COURT_INTERNAL_ID_TO_NAME = {
    22: "Platz 22",
 }
 
+COURT_NAME_TO_INTERNAL_ID: dict = {
+    name: id for id, name in COURT_INTERNAL_ID_TO_NAME.items()
+}
+
 @dataclass
 class TimeSlot:
     """Represents a time slot for booking."""
