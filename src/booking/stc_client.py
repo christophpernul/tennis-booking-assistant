@@ -10,9 +10,8 @@ from datetime import datetime, date
 from typing import Dict, List, Union
 
 from src.booking.constants import COURT_STC_ID_TO_INTERNAL_ID, COURT_INTERNAL_ID_TO_NAME, CourtAvailability, TimeSlot, CourtBookings
+from src.utils.validation import validate_date
 
-
-# TODO: Use this as a tool for the agent
 
 class STCBookingClient:
     """Client for interacting with the STC eBuSy booking system."""
@@ -34,15 +33,13 @@ class STCBookingClient:
         Returns:
             List of court availability data
         """
-        # Format date as DD/MM/YYYY for the URL
-        if not isinstance(target_date, str):
-            try:
-                date_str = target_date.strftime("%m/%d/%Y")
-            except ValueError:
-                raise("Invalid date format. Please provide a date object or a string in 'MM/DD/YYYY' format.")
+        if isinstance(target_date, date):
+            date_str = target_date.strftime("%m/%d/%Y")
+        elif isinstance(target_date, str):
+            validate_date(date_str=target_date)
+            date_str = datetime.strptime(target_date, "%d.%m.%Y").strftime("%m/%d/%Y")
         else:
-            # TODO: Add validation for input format!
-            date_str = target_date
+            raise ValueError("`target_date` must be a date object or a string in format DD.MM.YYYY")
         url = f"{self.base_url}/lite-module/891?timestamp=&currentDate={date_str}"
         
         try:
