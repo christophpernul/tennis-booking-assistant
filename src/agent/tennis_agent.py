@@ -4,7 +4,7 @@ Tennis booking AI agent that processes user requests and suggests available cour
 
 import asyncio
 from dataclasses import dataclass
-from agents import Agent, trace, Runner, function_tool
+from agents import Agent, trace, Runner, function_tool, gen_trace_id
 
 from src.data.courts import COURT_ATTRIBUTES
 from src.data.user_preferences import set_user_preferences
@@ -77,7 +77,7 @@ class TennisBookingAgent:
             Response from the AI agent
         """
         # Send the message directly to the agent
-        with trace("Tennis Agent"):
+        with trace("Tennis Agent", trace_id=gen_trace_id()):
             response = await Runner.run(self.agent, user_message)
         return response.final_output
 
