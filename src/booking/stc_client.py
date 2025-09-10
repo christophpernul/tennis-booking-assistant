@@ -131,6 +131,9 @@ class CourtBookingManager:
     def get_court_bookings(self) -> list[CourtBooking]:
         return self.court_bookings.copy()
 
+    # TODO: Think about how this class can be used with an agent.
+    # TODO 2: Decide where to implement checking court availability
+
     # def get_available_slots(self, target_date: date, start_time: str = None, end_time: str = None) -> List[TimeSlot]:
     #     """
     #     Get available time slots for a specific date and optional time range.
