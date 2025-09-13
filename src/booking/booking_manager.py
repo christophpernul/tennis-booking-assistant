@@ -99,6 +99,8 @@ class CourtBookingManager:
 
     def _parse_reservation_booking(self, reservation: dict) -> CourtBooking | None:
         """From a reservation entry, parse and return a CourtBooking object."""
+        booking_dict = {}
+
         court_id = reservation.get("court")
         if not court_id:
             raise ValueError(
@@ -122,11 +124,11 @@ class CourtBookingManager:
             raise ValueError(
                 f"Invalid date format in reservation data! Got '{reservation.get('toTime')}'"
             )
-        return CourtBooking(
-            court_name=self._convert_court_stc_id_to_name(court_id),
-            start_time=start_time,
-            end_time=end_time,
-        )
+        booking_dict["court_name"] = self._convert_court_stc_id_to_name(court_id)
+        booking_dict["start_time"] = start_time
+        booking_dict["end_time"] = end_time
+
+        return CourtBooking(**booking_dict)
 
     def get_court_bookings(self) -> list[CourtBooking]:
         return self.court_bookings.copy()
