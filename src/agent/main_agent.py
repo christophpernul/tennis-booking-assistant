@@ -78,13 +78,16 @@ class TennisBookingAgent:
         Returns:
             Response from the AI agent
         """
-        # Send the message directly to the agent
-        with trace("Tennis Agent", trace_id=gen_trace_id()):
-            response = await Runner.run(self.agent, user_message)
-        return response.final_output
+        try:
+            with trace("Tennis Agent", trace_id=gen_trace_id()):
+                response = await Runner.run(self.agent, user_message)
+            return response.final_output
+        except Exception as e:
+            print(f"Error processing request: {e}")
+            return "I'm sorry, I encountered an error processing your request. Please try again."
 
-    def chat_with_agent(
-        self, message: str, history: list[dict]
+    async def run(
+        self, message: str, history: list[dict] = None
     ) -> tuple[str, list[dict]]:
         """
         Process a chat message and return the agent's response.
@@ -96,17 +99,13 @@ class TennisBookingAgent:
         Returns:
             Tuple of (response, updated_history)
         """
+        if history is None:
+            history = []
+
         if not message.strip():
             return "", history
 
-        # Process the message with the agent
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-        try:
-            response = loop.run_until_complete(self._process_request(message))
-        finally:
-            loop.close()
+        response = await self._process_request(message)
 
         # Update history with messages format
         history.append({"role": "user", "content": message})
