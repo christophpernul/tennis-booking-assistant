@@ -8,7 +8,7 @@ from agents import Agent, trace, Runner, function_tool, gen_trace_id
 
 from src.data.courts import COURT_ATTRIBUTES
 from src.data.user_preferences import set_user_preferences
-from src.booking.stc_client import STCBookingClient
+from src.booking.booking_manager import CourtBookingManager
 
 from src.agent.prompts import SYSTEM_PROMPT
 
@@ -16,6 +16,7 @@ from src.agent.prompts import SYSTEM_PROMPT
 @dataclass
 class BookingSuggestion:
     """Represents a booking suggestion for the user."""
+
     court_id: str
     court_name: str
     court_type: str
@@ -26,17 +27,18 @@ class BookingSuggestion:
     duration: str
     is_preferred: bool = False
 
+
 @function_tool
 def get_booking_tool(date: str):
-    """Get the STC booking client instance."""
-    # TODO: Make sure the response is understandable by the agent. It does not parse it correctly.
-    # the date from the main agent's request.
-    booking_client = STCBookingClient()
-    return booking_client.get_court_bookings(target_date=date)
+    """Retrieves court bookings for `date` from CourtBookingManager."""
+    booking_client = CourtBookingManager(target_date=date)
+    return booking_client.get_court_bookings()
+
 
 @function_tool
 def get_court_attributes_tool() -> dict:
     return COURT_ATTRIBUTES
+
 
 @function_tool
 def get_user_preferences_tool(user_name: str) -> dict:
@@ -48,31 +50,31 @@ def get_user_preferences_tool(user_name: str) -> dict:
 
 class TennisBookingAgent:
     """AI agent for tennis court booking assistance."""
-    
+
     def __init__(self, openai_api_key: str):
         self.agent = Agent(
             name="tennis_booking_assistant",
             model="gpt-4o-mini",
             instructions=self._get_system_message(),
-            tools=[get_booking_tool,
-                   get_court_attributes_tool,
-                   # get_user_preferences_tool,
-                   ],
+            tools=[
+                get_booking_tool,
+                get_court_attributes_tool,
+                # get_user_preferences_tool,
+            ],
         )
 
-
-    
-    def _get_system_message(self) -> str:
+    @staticmethod
+    def _get_system_message() -> str:
         """Get the system message for the AI agent."""
         return SYSTEM_PROMPT
-    
+
     async def _process_request(self, user_message: str) -> str:
         """
         Process a user's booking request and return suggestions.
-        
+
         Args:
             user_message: The user's booking request
-            
+
         Returns:
             Response from the AI agent
         """
@@ -81,31 +83,33 @@ class TennisBookingAgent:
             response = await Runner.run(self.agent, user_message)
         return response.final_output
 
-    def chat_with_agent(self, message: str, history: list[dict]) -> tuple[str, list[dict]]:
+    def chat_with_agent(
+        self, message: str, history: list[dict]
+    ) -> tuple[str, list[dict]]:
         """
         Process a chat message and return the agent's response.
-        
+
         Args:
             message: User's message
             history: Chat history in messages format
-            
+
         Returns:
             Tuple of (response, updated_history)
         """
         if not message.strip():
             return "", history
-        
+
         # Process the message with the agent
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        
+
         try:
             response = loop.run_until_complete(self._process_request(message))
         finally:
             loop.close()
-        
+
         # Update history with messages format
         history.append({"role": "user", "content": message})
         history.append({"role": "assistant", "content": response})
-        
+
         return "", history

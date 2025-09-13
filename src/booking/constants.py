@@ -1,5 +1,5 @@
 from datetime import datetime
-from dataclasses import dataclass
+from pydantic import BaseModel, Field, field_validator
 
 COURT_STC_ID_TO_INTERNAL_ID = {
     1472: 1,
@@ -58,14 +58,16 @@ COURT_NAME_TO_INTERNAL_ID: dict = {
 }
 
 
-@dataclass
-class CourtBooking:
+class CourtBooking(BaseModel):
     """Represents a single booking / reservation of a court."""
 
-    court_name: str
-    start_time: datetime
-    end_time: datetime
+    court_name: str = Field(description="The name of the court being booked")
+    start_time: datetime = Field(description="The start date and time of the booking")
+    end_time: datetime = Field(description="The end date and time of the booking")
 
-    def __post_init__(self):
-        if self.start_time >= self.end_time:
-            raise ValueError("Start time must be before end time")
+    @field_validator("end_time")
+    @classmethod
+    def validate_end_time_after_start(cls, v, info):
+        if "start_time" in info.data and v <= info.data["start_time"]:
+            raise ValueError("End time must be after start time")
+        return v
