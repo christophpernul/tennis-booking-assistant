@@ -5,14 +5,14 @@ Gradio interface for the tennis booking assistant.
 import os
 import gradio as gr
 
-from src.agent.main_agent import TennisBookingAgent
+from src.agent.booking_manager import BookingManager
 
 
 class TennisBookingInterface:
     """Gradio interface for the tennis booking assistant."""
 
     def __init__(self, openai_api_key: str):
-        self.agent = TennisBookingAgent(openai_api_key)
+        self.agent_manager = BookingManager(openai_api_key)
         self.chat_history: list[dict] = []
 
     def create_interface(self) -> gr.Blocks:
@@ -75,13 +75,13 @@ class TennisBookingInterface:
 
             # Event handlers
             submit_btn.click(
-                self.agent.run,
+                self.agent_manager.run,
                 inputs=[msg, chatbot],
                 outputs=[msg, chatbot],
             )
 
             msg.submit(
-                self.agent.run,
+                self.agent_manager.run,
                 inputs=[msg, chatbot],
                 outputs=[msg, chatbot],
             )

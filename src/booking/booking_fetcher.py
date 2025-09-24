@@ -15,8 +15,8 @@ from src.booking.constants import (
 from src.utils.validation import validate_date
 
 
-class CourtBookingManager:
-    """Manages all court bookings on a given date via the STC eBuSy booking system."""
+class CourtBookingFetcher:
+    """Fetches all court bookings on a given date via the STC eBuSy booking system."""
 
     def __init__(self, target_date: date | str):
         self.target_date = self._parse_target_date(target_date)
@@ -166,6 +166,6 @@ class CourtBookingManager:
 
 # Global instance for easy access
 if __name__ == "__main__":
-    stc_client = CourtBookingManager(date.today())
+    stc_client = CourtBookingFetcher(date.today())
     bookings = stc_client.get_court_bookings()
     print(bookings)
