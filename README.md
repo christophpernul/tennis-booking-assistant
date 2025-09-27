@@ -2,6 +2,12 @@
 
 An AI agent that helps to find and book tennis courts.
 
+## Useful links
+- [openai-agents-python Docu](https://openai.github.io/openai-agents-python/)
+- [OpenAI Agents Docu](https://platform.openai.com/docs/guides/agents)
+- [OpenAI Traces](https://platform.openai.com/logs?api=traces)
+- 
+
 ## Technical setup
 
 The dependencies can be installed with `uv sync`.
