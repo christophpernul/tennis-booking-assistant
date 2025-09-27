@@ -71,3 +71,11 @@ class CourtBooking(BaseModel):
         if "start_time" in info.data and v <= info.data["start_time"]:
             raise ValueError("End time must be after start time")
         return v
+
+
+class BookingList(BaseModel):
+    """List of court bookings."""
+
+    bookings: list[CourtBooking] = Field(
+        description="List of all court bookings on a given day"
+    )
