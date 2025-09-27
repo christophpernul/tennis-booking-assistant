@@ -1,7 +1,7 @@
 from datetime import date
 from agents import Agent
 
-from src.agent.tools import get_booking_tool
+from src.agent.tools import get_court_availability_tool
 
 INSTRUCTIONS = (
     "Du bist ein hilfreicher Tennis-Buchungsassistent der für das vom Benutzer gewünschte Buchungsdatum Platzverfügbarkeiten findet. "
@@ -11,7 +11,7 @@ INSTRUCTIONS = (
     "**Validation**: Prüfe ob du das Buchungsdatum aus den vorliegenden Informationen finden kannst. Falls nicht, frage nach.\n\n"
     "Nachdem du das gewünschte Buchungsdatum gefunden hast, kannst du die Platzverfügbarkeit prüfen.\n"
     "2. Platzverfügbarkeit prüfen\n"
-    "- Verwende `get_booking_tool` mit dem Datum im Format '%d.%m.%Y'\n"
+    "- Verwende `get_court_availability_tool` mit dem Datum im Format '%d.%m.%Y'\n"
     "- Warte auf vollständige Tool-Response\n\n"
 )
 
@@ -19,5 +19,5 @@ booking_finder_agent = Agent(
     name="booking_finder",
     model="gpt-4o-mini",
     instructions=INSTRUCTIONS,
-    tools=[get_booking_tool],
+    tools=[get_court_availability_tool],
 )
