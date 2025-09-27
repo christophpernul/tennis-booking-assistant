@@ -73,9 +73,14 @@ class CourtBooking(BaseModel):
         return v
 
 
-class BookingList(BaseModel):
-    """List of court bookings."""
+class CourtAvailability(BaseModel):
+    """Represents a full day schedule for a single court"""
 
-    bookings: list[CourtBooking] = Field(
-        description="List of all court bookings on a given day"
-    )
+    court_name: str = Field(..., description="Name of the court")
+    availability: dict[int, bool] = Field(description="Hour to availability mapping")
+
+    def is_available(self, hour: int) -> bool:
+        return self.availability.get(hour, False)
+
+    def set_availability(self, hour: int, available: bool):
+        self.availability[hour] = available

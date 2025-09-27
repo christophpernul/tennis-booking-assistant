@@ -1,7 +1,6 @@
 from datetime import date
 from agents import Agent
 
-from src.booking.constants import BookingList
 from src.agent.tools import get_booking_tool
 
 INSTRUCTIONS = (
@@ -21,5 +20,4 @@ booking_finder_agent = Agent(
     model="gpt-4o-mini",
     instructions=INSTRUCTIONS,
     tools=[get_booking_tool],
-    output_type=BookingList,
 )
