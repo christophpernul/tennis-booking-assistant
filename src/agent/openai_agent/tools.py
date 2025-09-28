@@ -1,8 +1,7 @@
-from agents import function_tool, RunContextWrapper
+from agents import function_tool
 
 from src.booking.constants import CourtAvailability
 from src.booking.booking_fetcher import CourtBookingFetcher, convert_to_availability
-from src.agent.prompts import BookingContext
 
 
 @function_tool
