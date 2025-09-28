@@ -3,15 +3,14 @@ Tennis booking AI agent that processes user requests and suggests available cour
 """
 
 from dataclasses import dataclass
-from agents import Agent, trace, Runner, function_tool, gen_trace_id
+from agents import Agent, trace, Runner, gen_trace_id
 
 from src.data.courts import COURT_ATTRIBUTES
 from src.data.user_preferences import set_user_preferences
 
-from src.booking.constants import CourtBooking
-from src.booking.booking_fetcher import CourtBookingFetcher
-
 from src.agent.prompts import SYSTEM_PROMPT
+from src.agent.tools import get_court_availability_tool
+
 from src.agent.booking_finder import booking_finder_agent
 from src.agent.booking_recommender import booking_recommender_agent
 
@@ -59,8 +58,7 @@ class BookingManager:
             name="manager",
             model="gpt-4o-mini",
             instructions=self._get_system_message(),
-            # tools=[],
-            handoffs=[booking_finder_agent, booking_recommender_agent],
+            tools=[get_court_availability_tool],
         )
 
     #   File "D:\Documents\Projects\tennis-booking-assistant\.venv\Lib\site-packages\gradio\components\chatbot.py", line 574, in _postprocess_content
