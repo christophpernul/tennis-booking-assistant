@@ -7,6 +7,8 @@ from agents import Agent, Runner, SQLiteSession
 from src.agent.openai_agent.prompts import SYSTEM_PROMPT
 from src.agent.openai_agent.tools import get_court_availability_tool
 
+MODEL = "gpt-4o-mini"
+
 
 class OpenAIAgent:
     def __init__(self, trace_id: str, openai_api_key: str):
@@ -14,7 +16,7 @@ class OpenAIAgent:
         # self.agent = Agent[BookingContext](
         self.agent = Agent(
             name="BookingRecommender",
-            model="gpt-4o",
+            model=MODEL,
             instructions=self._get_system_message(),
             tools=[get_court_availability_tool],
         )
