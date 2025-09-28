@@ -155,7 +155,7 @@ def convert_to_availability(bookings: list[CourtBooking]) -> list[CourtAvailabil
         bookable_hours = {hour: True for hour in range(7, 22)}
         court_bookings = [b for b in bookings if b.court_name == court_name]
         for booking in court_bookings:
-            print(f"  Booking from {booking.start_time} to {booking.end_time}")
+            # print(f"  Booking from {booking.start_time} to {booking.end_time}")
             current_time = booking.start_time
             while current_time < booking.end_time:
                 current_hour = current_time.hour

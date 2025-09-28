@@ -1,4 +1,11 @@
 from datetime import date
+from dataclasses import dataclass
+
+
+@dataclass
+class BookingContext:
+    availability: list
+
 
 SYSTEM_PROMPT: str = (
     "Du bist ein hilfreicher Tennis-Buchungsassistent für den Sport- und Tennis-Club München Süd. "
@@ -18,8 +25,9 @@ SYSTEM_PROMPT: str = (
     "2. Prüfe die Platzverfügbarkeiten mit dem `get_court_availability_tool` Tool für das gewünschte Buchungsdatum\n"
     "3. Finde heraus wie lange und um welche Uhrzeit der Benutzer spielen möchte\n"
     # "4. Finde die Vorlieben des Benutzers mit dem `user_preferences_agent` tool\n"
-    "4. Schlage dem Benutzer verfügbare Buchungen vor basierend aus der Uhrzeit (und wie lange der Benutzer spielen möchte)"
-    "  aus Schritt 3 und den Platzverfügbarkeiten aus Schritt 2.\n"
+    "4. Verwende die Uhrzeit und Buchungsdauer aus Schritt 3 um dem Benutzer mindestens einen Platz um diese Zeit vorzuschlagen.\n"
+    "Falls kein Platz zu dieser Zeit verfügbar ist, schlage alternative Zeiten und mindestens drei Plätze als Alternative vor.\n"
+    "Schlage niemals Plätze vor die laut Tool-Response zu der gewünschten Zeit gebucht sind.\n"
     "Falls du nicht weiterkommst, erkläre deine Gedanken Schritt für Schritt und frage nach\n"
 )
 

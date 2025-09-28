@@ -2,69 +2,32 @@
 Tennis booking AI agent that processes user requests and suggests available courts.
 """
 
-from dataclasses import dataclass
-from agents import Agent, trace, Runner, gen_trace_id
-
-from src.data.courts import COURT_ATTRIBUTES
-from src.data.user_preferences import set_user_preferences
+from agents import Agent, trace, Runner, SQLiteSession, gen_trace_id
 
 from src.agent.prompts import SYSTEM_PROMPT
 from src.agent.tools import get_court_availability_tool
 
-from src.agent.booking_finder import booking_finder_agent
-from src.agent.booking_recommender import booking_recommender_agent
-
-
-@dataclass
-class BookingSuggestion:
-    """Represents a booking suggestion for the user."""
-
-    court_id: str
-    court_name: str
-    court_type: str
-    location: str
-    date: str
-    start_time: str
-    end_time: str
-    duration: str
-    is_preferred: bool = False
-
-
-# @function_tool
-# def get_booking_tool(date: str):
-#     """Retrieves court bookings for `date` from CourtBookingManager."""
-#     booking_fetcher = CourtBookingFetcher(target_date=date)
-#     return booking_fetcher.get_court_bookings()
-#
-#
-# @function_tool
-# def get_court_attributes_tool() -> dict:
-#     return COURT_ATTRIBUTES
-#
-#
-# @function_tool
-# def get_user_preferences_tool(user_name: str) -> dict:
-#     """Fetch user preferences from the database or in-memory store."""
-#
-#     all_preferences = set_user_preferences()
-#     return all_preferences.get_user_preferences(user_name)
+# from src.agent.prompts import BookingContext
 
 
 class BookingManager:
     """AI agent for tennis court booking assistance."""
 
+    # TODO: Now the agent does not know the fetched availabilities as context and only knows after using the tool
+    # and forgets this data later. We should add the data to the context of the agent.
+
     def __init__(self, openai_api_key: str):
+        # self.context = BookingContext(availability=[])
+        # self.agent = Agent[BookingContext](
         self.agent = Agent(
-            name="manager",
+            name="BookingRecommender",
             model="gpt-4o-mini",
             instructions=self._get_system_message(),
             tools=[get_court_availability_tool],
         )
+        self.trace_id = gen_trace_id()
+        self.session = SQLiteSession(self.trace_id)
 
-    #   File "D:\Documents\Projects\tennis-booking-assistant\.venv\Lib\site-packages\gradio\components\chatbot.py", line 574, in _postprocess_content
-    #     raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
-    # ValueError: Invalid message for Chatbot component: bookings=[Court
-    # TODO: The handoff means the sub agent will respond with some text, but the output is the booking list.
     @staticmethod
     def _get_system_message() -> str:
         """Get the system message for the AI agent."""
@@ -73,7 +36,11 @@ class BookingManager:
     async def _run_manager(self, user_message: str) -> str:
         """Run the agent with the given user message."""
         print("Starting booking manager...")
-        response = await Runner.run(self.agent, user_message)
+        response = await Runner.run(
+            self.agent,
+            user_message,
+            session=self.session,  # context=self.context
+        )
         return response.final_output
 
     async def run(
@@ -95,11 +62,10 @@ class BookingManager:
         if not message.strip():
             return "", history
 
-        trace_id = gen_trace_id()
         try:
-            with trace("Tennis Agent", trace_id=trace_id):
+            with trace("Tennis Agent", trace_id=self.trace_id):
                 print(
-                    f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
+                    f"View trace: https://platform.openai.com/traces/trace?trace_id={self.trace_id}"
                 )
                 # yield f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
                 response = await self._run_manager(message)
