@@ -5,18 +5,20 @@ Fetches court availability from the eBuSy booking system.
 
 import json
 import requests
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from src.booking.constants import (
     COURT_STC_ID_TO_INTERNAL_ID,
     COURT_INTERNAL_ID_TO_NAME,
     CourtBooking,
+    CourtAvailability,
 )
 from src.utils.validation import validate_date
+from src.data.courts import get_court_names
 
 
-class CourtBookingManager:
-    """Manages all court bookings on a given date via the STC eBuSy booking system."""
+class CourtBookingFetcher:
+    """Fetches all court bookings on a given date via the STC eBuSy booking system."""
 
     def __init__(self, target_date: date | str):
         self.target_date = self._parse_target_date(target_date)
@@ -133,39 +135,52 @@ class CourtBookingManager:
     def get_court_bookings(self) -> list[CourtBooking]:
         return self.court_bookings.copy()
 
-    # def get_available_slots(self, target_date: date, start_time: str = None, end_time: str = None) -> List[TimeSlot]:
-    #     """
-    #     Get available time slots for a specific date and optional time range.
 
-    #     Args:
-    #         target_date: The date to check
-    #         start_time: Optional start time filter (HH:MM format)
-    #         end_time: Optional end time filter (HH:MM format)
+def convert_to_availability(bookings: list[CourtBooking]) -> list[CourtAvailability]:
+    """
+    Convert court bookings to availability structure.
 
-    #     Returns:
-    #         List of available time slots
-    #     """
-    #     courts_availability = self.get_court_availability(target_date)
+    Args:
+        bookings: List of CourtBooking objects
 
-    #     available_slots = []
-    #     for court_avail in courts_availability:
-    #         for slot in court_avail.time_slots:
-    #             if not slot.is_available:
-    #                 continue
+    Returns:
+        Dictionary with court names as keys and hour->availability mapping as values
+        True means available, False means booked
+    """
+    all_court_availabilities = []
 
-    #             # Apply time filters if provided
-    #             if start_time and slot.start_time < start_time:
-    #                 continue
-    #             if end_time and slot.end_time > end_time:
-    #                 continue
+    all_court_names = set(get_court_names())
+    for court_name in sorted(all_court_names):
+        print(f"Processing court: {court_name}")
+        bookable_hours = {hour: True for hour in range(7, 22)}
+        court_bookings = [b for b in bookings if b.court_name == court_name]
+        for booking in court_bookings:
+            # print(f"  Booking from {booking.start_time} to {booking.end_time}")
+            current_time = booking.start_time
+            while current_time < booking.end_time:
+                current_hour = current_time.hour
 
-    #             available_slots.append(slot)
+                hour_start = current_time
+                hour_end = current_time + timedelta(hours=1)
+                if not (
+                    booking.end_time <= hour_start or booking.start_time >= hour_end
+                ):
+                    print(f"    Marking hour {current_hour} as booked")
+                    bookable_hours[current_hour] = False
 
-    #     return available_slots
+                current_time += timedelta(hours=1)
+        court_availability = CourtAvailability(
+            court_name=court_name, availability=bookable_hours
+        )
+        all_court_availabilities.append(court_availability)
+
+    return all_court_availabilities
 
 
 # Global instance for easy access
 if __name__ == "__main__":
-    stc_client = CourtBookingManager(date.today())
+    stc_client = CourtBookingFetcher(date.today())
     bookings = stc_client.get_court_bookings()
+    avails = convert_to_availability(bookings)
     print(bookings)
+    print(avails)

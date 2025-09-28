@@ -71,3 +71,16 @@ class CourtBooking(BaseModel):
         if "start_time" in info.data and v <= info.data["start_time"]:
             raise ValueError("End time must be after start time")
         return v
+
+
+class CourtAvailability(BaseModel):
+    """Represents a full day schedule for a single court"""
+
+    court_name: str = Field(..., description="Name of the court")
+    availability: dict[int, bool] = Field(description="Hour to availability mapping")
+
+    def is_available(self, hour: int) -> bool:
+        return self.availability.get(hour, False)
+
+    def set_availability(self, hour: int, available: bool):
+        self.availability[hour] = available

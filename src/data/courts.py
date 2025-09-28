@@ -9,6 +9,7 @@ from typing import List, Optional
 @dataclass
 class Court:
     """Represents a tennis court with its properties."""
+
     id: int
     name: str
     location: str  # Location of the court in the club
@@ -18,6 +19,7 @@ class Court:
     is_wingfield: bool = False  # Whether the court is a Wingfield court
     is_available: bool = False  # Current availability status
 
+
 # Court database based on STC eBuSy system
 COURT_ATTRIBUTES = [
     Court(
@@ -26,7 +28,7 @@ COURT_ATTRIBUTES = [
         location="links, Aufschlagtrainingsplatz, Ballmaschinenplatz",
         is_middle_court=False,
         is_singles_only=True,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=1,
@@ -34,15 +36,15 @@ COURT_ATTRIBUTES = [
         location="links",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=2,
-        name="Platz 2", 
+        name="Platz 2",
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=3,
@@ -50,7 +52,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=4,
@@ -58,7 +60,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=5,
@@ -66,7 +68,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=6,
@@ -74,7 +76,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=7,
@@ -82,7 +84,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Sandplätze",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=8,
@@ -90,7 +92,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Sandplätze",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=9,
@@ -98,7 +100,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Sandplätze",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=10,
@@ -106,7 +108,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="granulat"
+        court_type="granulat",
     ),
     Court(
         id=11,
@@ -114,7 +116,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Granulatplätze",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="granulat"
+        court_type="granulat",
     ),
     Court(
         id=12,
@@ -122,15 +124,15 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="granulat"
+        court_type="granulat",
     ),
     Court(
         id=13,
-        name="T-Platz",
+        name="Platz T",
         location="Mitte, vor dem Restaurant",
         is_middle_court=False,
         is_singles_only=True,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=14,
@@ -138,7 +140,7 @@ COURT_ATTRIBUTES = [
         location="hinten rechts, beim Park",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=15,
@@ -146,7 +148,7 @@ COURT_ATTRIBUTES = [
         location="hinten rechts",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=16,
@@ -154,7 +156,7 @@ COURT_ATTRIBUTES = [
         location="hinten rechts",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=17,
@@ -163,7 +165,7 @@ COURT_ATTRIBUTES = [
         is_middle_court=False,
         is_singles_only=False,
         court_type="sand",
-        is_wingfield=True
+        is_wingfield=True,
     ),
     Court(
         id=18,
@@ -171,7 +173,7 @@ COURT_ATTRIBUTES = [
         location="hinten Mitte",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=19,
@@ -179,7 +181,7 @@ COURT_ATTRIBUTES = [
         location="hinten Mitte",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=20,
@@ -187,7 +189,7 @@ COURT_ATTRIBUTES = [
         location="hinten links",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=21,
@@ -195,7 +197,7 @@ COURT_ATTRIBUTES = [
         location="hinten links",
         is_middle_court=True,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
     Court(
         id=22,
@@ -203,9 +205,14 @@ COURT_ATTRIBUTES = [
         location="hinten links",
         is_middle_court=False,
         is_singles_only=False,
-        court_type="sand"
+        court_type="sand",
     ),
 ]
+
+
+def get_court_names() -> list[str]:
+    """Get a list of all court names."""
+    return [court.name for court in COURT_ATTRIBUTES]
 
 
 def get_court_by_id(court_id: int) -> Optional[Court]:
@@ -223,7 +230,11 @@ def get_available_courts() -> List[Court]:
 
 def get_courts_by_type(court_type: str) -> List[Court]:
     """Get courts by type (e.g., 'clay', 'hard', 'indoor')."""
-    return [court for court in COURT_ATTRIBUTES if court.court_type.lower() == court_type.lower()]
+    return [
+        court
+        for court in COURT_ATTRIBUTES
+        if court.court_type.lower() == court_type.lower()
+    ]
 
 
 def get_middle_courts() -> List[Court]:

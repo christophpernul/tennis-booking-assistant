@@ -4,19 +4,17 @@ Gradio interface for the tennis booking assistant.
 
 import os
 import gradio as gr
-from typing import List, Tuple
 
-from src.agent.tennis_agent import TennisBookingAgent
+from src.interface.agent import BookingManager
 
 
 class TennisBookingInterface:
     """Gradio interface for the tennis booking assistant."""
-    
+
     def __init__(self, openai_api_key: str):
-        self.agent = TennisBookingAgent(openai_api_key)
-        self.chat_history: List[dict] = []
-    
-    
+        self.agent = BookingManager(openai_api_key)
+        self.chat_history: list[dict] = []
+
     def create_interface(self) -> gr.Blocks:
         """Create the Gradio interface."""
         with gr.Blocks(
@@ -34,10 +32,11 @@ class TennisBookingInterface:
                 margin: 10px 0;
                 border-left: 4px solid #007bff;
             }
-            """
+            """,
         ) as interface:
-            
-            gr.Markdown("""
+
+            gr.Markdown(
+                """
             # 🎾 Tennis Buchungsassistent
             
             **Sport- und Tennis-Club München Süd**
@@ -49,48 +48,46 @@ class TennisBookingInterface:
             - "Mein Name ist John, ich bevorzuge Sandplätze"
             - "Suche nach Hallenplätzen für Einzel am Freitag"
             - "Brauche einen Platz für Doppel am Wochenende"
-            """)
-            
+            """
+            )
+
             # Chat interface
             chatbot = gr.Chatbot(
                 label="Chat mit Tennis Assistent",
                 height=500,
                 show_label=True,
                 container=True,
-                type="messages"
+                type="messages",
             )
-            
+
             with gr.Row():
                 # Text input
                 msg = gr.Textbox(
                     label="Nachricht eingeben",
                     placeholder="z.B., Ich möchte morgen um 15 Uhr Tennis spielen",
                     lines=2,
-                    scale=3
+                    scale=3,
                 )
-                
+
             with gr.Row():
                 submit_btn = gr.Button("Senden", variant="primary", size="lg")
                 clear_btn = gr.Button("Chat löschen", variant="secondary")
-            
+
             # Event handlers
             submit_btn.click(
-                self.agent.chat_with_agent,
+                self.agent.run,
                 inputs=[msg, chatbot],
-                outputs=[msg, chatbot]
+                outputs=[msg, chatbot],
             )
-            
+
             msg.submit(
-                self.agent.chat_with_agent,
+                self.agent.run,
                 inputs=[msg, chatbot],
-                outputs=[msg, chatbot]
+                outputs=[msg, chatbot],
             )
-            
-            clear_btn.click(
-                lambda: ([], ""),
-                outputs=[chatbot, msg]
-            )
-        
+
+            clear_btn.click(lambda: ([], ""), outputs=[chatbot, msg])
+
         return interface
 
 
