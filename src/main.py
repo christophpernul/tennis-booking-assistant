@@ -55,15 +55,16 @@ def main():
     if not check_requirements():
         sys.exit(1)
 
-    # Get OpenAI API key
+    # Get OpenAI API key and model name
     openai_api_key = os.getenv("OPENAI_API_KEY")
+    openai_model = os.getenv("OPENAI_MODEL_NAME", "gpt-4o")
     # Get port from environment variable (Cloud Run uses PORT=8080)
     port = int(os.environ.get("PORT", 7860))
     # Get server name (0.0.0.0 for Cloud Run, 127.0.0.1 for local)
     server_name = os.environ.get("GRADIO_SERVER_NAME", "127.0.0.1")
 
     # Create and launch the Gradio app
-    app = create_app(openai_api_key)
+    app = create_app(openai_api_key, openai_model)
 
     print("✅ Tennis Booking Assistant is ready!")
     print("🌐 Opening web interface...")

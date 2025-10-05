@@ -10,10 +10,12 @@ from src.agent.openai_agent.booking_manager import OpenAIAgent
 class BookingManager:
     """AI agent for tennis court booking assistance."""
 
-    def __init__(self, openai_api_key: str):
+    def __init__(self, openai_api_key: str, openai_model: str):
         self.trace_id = gen_trace_id()
         self.openai_agent = OpenAIAgent(
-            trace_id=self.trace_id, openai_api_key=openai_api_key
+            trace_id=self.trace_id,
+            openai_api_key=openai_api_key,
+            openai_model=openai_model,
         )
 
     async def run(
