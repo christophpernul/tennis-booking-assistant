@@ -11,8 +11,8 @@ from src.interface.agent import BookingManager
 class TennisBookingInterface:
     """Gradio interface for the tennis booking assistant."""
 
-    def __init__(self, openai_api_key: str):
-        self.agent = BookingManager(openai_api_key)
+    def __init__(self, openai_api_key: str, openai_model: str):
+        self.agent = BookingManager(openai_api_key, openai_model)
         self.chat_history: list[dict] = []
 
     def create_interface(self) -> gr.Blocks:
@@ -39,9 +39,7 @@ class TennisBookingInterface:
                 """
             # 🎾 Tennis Buchungsassistent
             
-            **Sport- und Tennis-Club München Süd**
-            
-            Frag mich, um dir bei der Suche und Buchung von Tennisplätzen zu helfen! Ich kann die Verfügbarkeit prüfen und basierend auf deinen Vorlieben die besten Optionen vorschlagen.
+            Frag mich, um dir bei der Suche von freien Tennisplätzen beim STC München zu helfen! Ich kann die Verfügbarkeit prüfen und basierend auf deinen Vorlieben die besten Optionen vorschlagen.
             
             **Beispielanfragen:**
             - "Ich möchte morgen um 15 Uhr Tennis spielen"
@@ -91,14 +89,15 @@ class TennisBookingInterface:
         return interface
 
 
-def create_app(openai_api_key: str) -> gr.Blocks:
+def create_app(openai_api_key: str, openai_model: str) -> gr.Blocks:
     """Create and return the Gradio app."""
-    interface = TennisBookingInterface(openai_api_key)
+    interface = TennisBookingInterface(openai_api_key, openai_model)
     return interface.create_interface()
 
 
 if __name__ == "__main__":
     # For testing - you would normally get this from environment
     api_key = os.getenv("OPENAI_API_KEY", "your-api-key-here")
-    app = create_app(api_key)
+    openai_model = os.getenv("OPENAI_MODEL_NAME", "your-api-key-here")
+    app = create_app(api_key, openai_model)
     app.launch(share=True)
