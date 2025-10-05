@@ -1,5 +1,6 @@
 from agents import function_tool
 
+from src.data.courts import Court, COURT_ATTRIBUTES
 from src.booking.constants import CourtAvailability
 from src.booking.booking_fetcher import CourtBookingFetcher, convert_to_availability
 
@@ -25,9 +26,11 @@ def get_court_availability_tool(
     return court_availabilities
 
 
-# @function_tool
-# def get_court_attributes_tool() -> dict:
-#     return COURT_ATTRIBUTES
+@function_tool
+def get_court_attributes_tool() -> list[Court]:
+    return COURT_ATTRIBUTES
+
+
 #
 #
 # @function_tool

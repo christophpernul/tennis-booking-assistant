@@ -57,9 +57,9 @@ def main():
 
     # Get OpenAI API key and model name
     openai_api_key = os.getenv("OPENAI_API_KEY")
-    openai_model = os.getenv("OPENAI_MODEL_NAME", "gpt-4o")
+    openai_model = os.getenv("OPENAI_MODEL_NAME", "gpt-4o-mini")
     # Get port from environment variable (Cloud Run uses PORT=8080)
-    port = int(os.environ.get("PORT", 7860))
+    port = int(os.environ.get("GRADIO_SERVER_PORT", 7860))
     # Get server name (0.0.0.0 for Cloud Run, 127.0.0.1 for local)
     server_name = os.environ.get("GRADIO_SERVER_NAME", "127.0.0.1")
 
@@ -75,6 +75,8 @@ def main():
         server_port=port,
         share=False,
         show_error=True,
+        inbrowser=False,  # do not use browser in cloud run
+        show_api=False,  # disable queue for faster startup
     )
 
 

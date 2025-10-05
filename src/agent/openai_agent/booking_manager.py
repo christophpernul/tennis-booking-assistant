@@ -5,7 +5,10 @@ Tennis booking AI agent that suggests available courts.
 from agents import Agent, Runner, SQLiteSession
 
 from src.agent.openai_agent.prompts import SYSTEM_PROMPT
-from src.agent.openai_agent.tools import get_court_availability_tool
+from src.agent.openai_agent.tools import (
+    get_court_availability_tool,
+    get_court_attributes_tool,
+)
 
 
 class OpenAIAgent:
@@ -16,7 +19,10 @@ class OpenAIAgent:
             name="BookingRecommender",
             model=openai_model,
             instructions=self._get_system_message(),
-            tools=[get_court_availability_tool],
+            tools=[
+                get_court_availability_tool,
+                get_court_attributes_tool,
+            ],
         )
         self.session = SQLiteSession(trace_id)
         # TODO: Now the agent does not know the fetched availabilities as context and only knows after using the tool

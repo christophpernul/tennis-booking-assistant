@@ -2,22 +2,38 @@
 Court data and context information for the tennis booking assistant.
 """
 
-from dataclasses import dataclass
+from pydantic import BaseModel, Field
 from typing import List, Optional
 
 
-@dataclass
-class Court:
+from pydantic import BaseModel, Field
+
+
+class Court(BaseModel):
     """Represents a tennis court with its properties."""
 
-    id: int
-    name: str
-    location: str  # Location of the court in the club
-    is_middle_court: bool  # Whether the court is a middle court
-    is_singles_only: bool  # Whether the court is only for singles
-    court_type: str  # Type of court (e.g., "clay", "hard", "indoor")
-    is_wingfield: bool = False  # Whether the court is a Wingfield court
-    is_available: bool = False  # Current availability status
+    id: int = Field(description="Unique identifier for the court")
+    name: str = Field(
+        description="Display name of the court (e.g., 'Platz 1', 'Platz A')"
+    )
+    location: str = Field(
+        description="Physical location of the court within the club grounds"
+    )
+    is_middle_court: bool = Field(
+        description="True if court is positioned in the middle (affects accessibility/desirability)",
+    )
+    is_singles_only: bool = Field(
+        description="True if court dimensions/markings are singles-only (not suitable for doubles)",
+    )
+    court_type: str = Field(description="Surface material: 'sand' or 'granulat'")
+    is_wingfield: bool = Field(
+        default=False,
+        description="True if court has a Wingfield system installed",
+    )
+    is_indoors: bool = Field(
+        default=False,
+        description="True if court has roof/enclosure for winter play. IIf true, only true if between end of September and end of April.",
+    )
 
 
 # Court database based on STC eBuSy system
@@ -28,6 +44,7 @@ COURT_ATTRIBUTES = [
         location="links, Aufschlagtrainingsplatz, Ballmaschinenplatz",
         is_middle_court=False,
         is_singles_only=True,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -36,6 +53,7 @@ COURT_ATTRIBUTES = [
         location="links",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -44,6 +62,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -52,6 +71,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -60,6 +80,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -68,6 +89,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -76,6 +98,7 @@ COURT_ATTRIBUTES = [
         location="links, Tennisschule",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -84,6 +107,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Sandplätze",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=True,
         court_type="sand",
     ),
     Court(
@@ -92,6 +116,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Sandplätze",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=True,
         court_type="sand",
     ),
     Court(
@@ -100,6 +125,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Sandplätze",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=True,
         court_type="sand",
     ),
     Court(
@@ -108,6 +134,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=True,
         court_type="granulat",
     ),
     Court(
@@ -116,6 +143,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Granulatplätze",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=True,
         court_type="granulat",
     ),
     Court(
@@ -124,6 +152,7 @@ COURT_ATTRIBUTES = [
         location="Eingang rechts, Granulatplätze",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=True,
         court_type="granulat",
     ),
     Court(
@@ -132,6 +161,7 @@ COURT_ATTRIBUTES = [
         location="Mitte, vor dem Restaurant",
         is_middle_court=False,
         is_singles_only=True,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -140,6 +170,7 @@ COURT_ATTRIBUTES = [
         location="hinten rechts, beim Park",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -148,6 +179,7 @@ COURT_ATTRIBUTES = [
         location="hinten rechts",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -164,6 +196,7 @@ COURT_ATTRIBUTES = [
         location="hinten Mitte, Wingfield",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
         is_wingfield=True,
     ),
@@ -173,6 +206,7 @@ COURT_ATTRIBUTES = [
         location="hinten Mitte",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -181,6 +215,7 @@ COURT_ATTRIBUTES = [
         location="hinten Mitte",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -189,6 +224,7 @@ COURT_ATTRIBUTES = [
         location="hinten links",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -197,6 +233,7 @@ COURT_ATTRIBUTES = [
         location="hinten links",
         is_middle_court=True,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
     Court(
@@ -205,6 +242,7 @@ COURT_ATTRIBUTES = [
         location="hinten links",
         is_middle_court=False,
         is_singles_only=False,
+        is_indoors=False,
         court_type="sand",
     ),
 ]
