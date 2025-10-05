@@ -11,7 +11,7 @@ from src.interface.agent import BookingManager
 class TennisBookingInterface:
     """Gradio interface for the tennis booking assistant."""
 
-    def __init__(self, openai_api_key: str):
+    def __init__(self, openai_api_key: str, openai_model: str):
         self.agent = BookingManager(openai_api_key, openai_model)
         self.chat_history: list[dict] = []
 
@@ -39,9 +39,7 @@ class TennisBookingInterface:
                 """
             # 🎾 Tennis Buchungsassistent
             
-            **Sport- und Tennis-Club München Süd**
-            
-            Frag mich, um dir bei der Suche und Buchung von Tennisplätzen zu helfen! Ich kann die Verfügbarkeit prüfen und basierend auf deinen Vorlieben die besten Optionen vorschlagen.
+            Frag mich, um dir bei der Suche von freien Tennisplätzen beim STC München zu helfen! Ich kann die Verfügbarkeit prüfen und basierend auf deinen Vorlieben die besten Optionen vorschlagen.
             
             **Beispielanfragen:**
             - "Ich möchte morgen um 15 Uhr Tennis spielen"

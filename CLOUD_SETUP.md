@@ -14,6 +14,7 @@ We are using Google Cloud to deploy this application.
 
 1. Enable Google Secret Manager API
 2. Store `OPENAI_API_KEY` in Google Secret Manager
+   1. Grant role `Secret Manager Secret Accessor` to default compute service account
 3. Enable Google Artifact Registry API to store your Docker images
 4. Create a Docker repository in Artifact Registry `europe-west3-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo`
 5. Download and install Docker Desktop
