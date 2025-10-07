@@ -2,9 +2,45 @@
 Tennis booking AI agent that processes user requests and suggests available courts.
 """
 
-from agents import trace, gen_trace_id
+from agents import Agent, Runner, SQLiteSession, trace, gen_trace_id
 
-from src.agent.openai_agent.booking_manager import OpenAIAgent
+from src.agent.openai_agent.prompts import SYSTEM_PROMPT
+from src.agent.openai_agent.tools import (
+    get_court_availability_tool,
+    get_court_attributes_tool,
+)
+
+
+class OpenAIAgent:
+    def __init__(self, trace_id: str, openai_api_key: str, openai_model: str):
+        # self.context = BookingContext(availability=[])
+        # self.agent = Agent[BookingContext](
+        self.agent = Agent(
+            name="BookingRecommender",
+            model=openai_model,
+            instructions=self._get_system_message(),
+            tools=[
+                get_court_availability_tool,
+                get_court_attributes_tool,
+            ],
+        )
+        self.session = SQLiteSession(trace_id)
+
+    @staticmethod
+    def _get_system_message() -> str:
+        """Get the system message for the AI agent."""
+        return SYSTEM_PROMPT
+
+    async def run_agent(self, user_message: str) -> str:
+        """Run the agent with the given user message."""
+        print("Starting booking manager...")
+        response = await Runner.run(
+            self.agent,
+            user_message,
+            session=self.session,
+            # context=self.context
+        )
+        return response.final_output
 
 
 class BookingManager:
@@ -52,4 +88,4 @@ class BookingManager:
         history.append({"role": "user", "content": message})
         history.append({"role": "assistant", "content": response})
 
-        return "", history
+        return response, history

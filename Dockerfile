@@ -15,22 +15,20 @@ RUN pip install uv
 
 # Copy project files
 COPY pyproject.toml .
-COPY uv.lock* .
 
 # Install Python dependencies
-RUN uv sync --frozen
+RUN uv sync
 
 # Copy application code
-COPY src/ ./src/
-COPY run.py .
+COPY . .
 
 # Set environment variables
-ENV PORT=8080
-ENV GRADIO_SERVER_NAME="0.0.0.0"
-ENV GRADIO_SERVER_PORT=8080
+ENV PORT=8000
+ENV SERVER_NAME="0.0.0.0"
+ENV SERVER_PORT=8000
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8000
 
 # Run the application
-CMD ["uv", "run", "python", "run.py"]
+CMD ["uv", "run", "chainlit", "run", "run.py", "--host", "0.0.0.0", "--port", "8000"]
