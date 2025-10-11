@@ -6,12 +6,18 @@ An AI agent that helps to find and book tennis courts.
 - [openai-agents-python Docu](https://openai.github.io/openai-agents-python/)
 - [OpenAI Agents Docu](https://platform.openai.com/docs/guides/agents)
 - [OpenAI Traces](https://platform.openai.com/logs?api=traces)
-- 
+-
 
 ## Technical setup
 
 The dependencies can be installed with `uv sync`.
-The agent is built using `openai` and `agents` frameworks and uses `gpt-4o-mini` as an LLM model.
+The agent is built using `openai` and `agents` frameworks and uses `gpt-4o-mini` as a default LLM model.
+
+## CI/CD Configuration
+
+The repository includes the following CI/CD pipelines:
+- `pre-commit`: Executes `pre-commit` hooks on new commits
+- `docker-build-push`: Builds a Docker image from the code, tags it properly, pushes it to GCP and deploys it with Google Cloud Run
 
 ### Quick Start
 
@@ -63,12 +69,12 @@ question and additional context information that is hard coded about the courts.
 the agent suggests other courts. If no courts are available for the time the user wants to play, the agent suggests a different time near
 to the time the user asked for.
 
-There is a gradio frontend that only shows a chatprompt, that ideally has the ability to get voice input. An additional HTML element is shown with the 
+There is a gradio frontend that only shows a chatprompt, that ideally has the ability to get voice input. An additional HTML element is shown with the
 answer of the agent.
 
 ## Assistant technical information
 
-The agent knows context about the courts. For each court the agent knows 
+The agent knows context about the courts. For each court the agent knows
 - the location of the court in the club
 - whether the court is a middle court or not
 - whether the court is only a single's court

@@ -2,11 +2,6 @@ from datetime import date
 from dataclasses import dataclass
 
 
-@dataclass
-class BookingContext:
-    availability: list
-
-
 SYSTEM_PROMPT: str = (
     "Du bist ein hilfreicher Tennis-Buchungsassistent für den Sport- und Tennis-Club München Süd. "
     "Deine Aufgabe ist es mit dem Benutzer zu interagieren und ihm dabei zu helfen einen Tennisplatz zu buchen.\n"
