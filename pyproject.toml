@@ -15,15 +15,16 @@ dependencies = [
     "requests>=2.32.4",
     "python-dotenv>=1.1.0",
     "setuptools>=80.9.0",
-    "chainlit>=2.8.3"
+    "chainlit>=2.8.3",
 ]
 
 
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest>=7.0.0",
     "black>=23.0.0",
     "isort>=5.0.0",
     "flake8>=6.0.0",
+    "pre-commit>=4.3.0",
 ]
