@@ -43,4 +43,4 @@ We are using Google Cloud to deploy this application.
 
 - Use GitHub Actions to automate the deployment process and upload packages to Google Artifact Registry
 - Use [PyPI](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to manage and distribute your Python packages
-- 
+-
