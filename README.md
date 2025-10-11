@@ -17,9 +17,7 @@ The agent is built using `openai` and `agents` frameworks and uses `gpt-4o-mini`
 
 The repository includes the following CI/CD pipelines:
 - `pre-commit`: Executes `pre-commit` hooks on new commits
-- `docker-build-push`: Builds a Docker image from the code, tags it properly and pushes it to GCP
-
-## Cloud Deployment
+- `docker-build-push`: Builds a Docker image from the code, tags it properly, pushes it to GCP and deploys it with Google Cloud Run
 
 ### Quick Start
 

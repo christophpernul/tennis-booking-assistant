@@ -23,7 +23,7 @@ We are using Google Cloud to deploy this application.
    gcloud auth configure-docker europe-west3-docker.pkg.dev
    ```
 
-## Deployment
+## Manual Deployment
 
 1. Build your Docker image:
    ```bash
@@ -38,9 +38,12 @@ We are using Google Cloud to deploy this application.
     docker push europe-west3-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo/tennis-booking-assistant:latest
     ```
 
+4. Use the new image in Google Cloud Run to deploy a new container
 
-## Automation Ideas
+## Automatic Deployment
 
-- Use GitHub Actions to automate the deployment process and upload packages to Google Artifact Registry
-- Use [PyPI](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to manage and distribute your Python packages
--
+The CI/CD pipeline of this repository contains a `docker-gcp-deploy.yml` workflow,
+that builds the Docker image, tags it, pushes it to GCP registry and re-deploys a
+Google Cloud Run service with the new image.
+
+To set it up initially follow the instructions in `docker-gcp-deploy.yml`.
