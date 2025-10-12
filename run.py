@@ -45,8 +45,8 @@ if not check_requirements():
 # Get OpenAI API key and model name
 openai_api_key = os.getenv(ENV_VAR_NAME_OPENAI_API_KEY)
 openai_model = os.getenv(ENV_VAR_NAME_MODEL_NAME, "gpt-4o-mini")
-# Get port from environment variable (Cloud Run uses PORT=8080)
-port = int(os.environ.get(ENV_VAR_NAME_SERVER_PORT, 7860))
+# Get port from environment variable
+port = int(os.environ.get(ENV_VAR_NAME_SERVER_PORT, 8000))
 # Get server name (0.0.0.0 for Cloud Run, 127.0.0.1 for local)
 server_name = os.environ.get(ENV_VAR_NAME_SERVER_NAME, "127.0.0.1")
 
