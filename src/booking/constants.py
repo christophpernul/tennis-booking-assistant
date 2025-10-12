@@ -1,6 +1,15 @@
 from datetime import datetime
 from pydantic import BaseModel, Field, field_validator
 
+INDOOR_COURT_STC_ID_TO_INTERNAL_ID = {
+    3261: 8,
+    3262: 7,
+    3263: 11,
+    3264: 10,
+    3265: 9,
+    3266: 12,
+}
+
 COURT_STC_ID_TO_INTERNAL_ID = {
     1472: 1,
     1473: 2,

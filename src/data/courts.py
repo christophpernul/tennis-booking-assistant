@@ -248,9 +248,12 @@ COURT_ATTRIBUTES = [
 ]
 
 
-def get_court_names() -> list[str]:
+def get_all_court_names(for_indoors: bool = False) -> list[str]:
     """Get a list of all court names."""
-    return [court.name for court in COURT_ATTRIBUTES]
+    if for_indoors:
+        return [court.name for court in COURT_ATTRIBUTES if court.is_indoors]
+    else:
+        return [court.name for court in COURT_ATTRIBUTES]
 
 
 def get_court_by_id(court_id: int) -> Optional[Court]:
