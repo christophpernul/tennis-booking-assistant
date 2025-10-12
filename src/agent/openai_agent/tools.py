@@ -6,7 +6,7 @@ from src.booking.booking_fetcher import CourtBookingFetcher
 
 
 @function_tool
-def get_court_availability_tool(
+async def get_court_availability_tool(
     # wrapper: RunContextWrapper[BookingContext],
     date: str,
     for_indoors: bool,
@@ -29,7 +29,7 @@ def get_court_availability_tool(
 
 
 @function_tool
-def get_court_attributes_tool() -> list[Court]:
+async def get_court_attributes_tool() -> list[Court]:
     return COURT_ATTRIBUTES
 
 
