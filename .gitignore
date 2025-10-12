@@ -208,3 +208,7 @@ __marimo__/
 
 # Gradio
 .gradio/
+
+# Chainlit
+.chainlit/*
+!.chainlit/config.toml
