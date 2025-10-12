@@ -2,25 +2,27 @@ from agents import function_tool
 
 from src.data.courts import Court, COURT_ATTRIBUTES
 from src.booking.constants import CourtAvailability
-from src.booking.booking_fetcher import CourtBookingFetcher, convert_to_availability
+from src.booking.booking_fetcher import CourtBookingFetcher
 
 
 @function_tool
 def get_court_availability_tool(
     # wrapper: RunContextWrapper[BookingContext],
     date: str,
+    for_indoors: bool,
 ) -> list[CourtAvailability]:
     """
-    Retrieves court availabilities for `date` for all courts.
+    Retrieves court availabilities for `date` for all courts either for indoors only or for outside.
 
     Args:
         date: Date in DD.MM.YYYY format
+        for_indoors: bool, whether to fetch court availability for indoor courts or not
 
     Returns:
         List of CourtAvailability objects for all courts on the specified date
     """
-    booking_fetcher = CourtBookingFetcher(target_date=date)
-    court_availabilities = convert_to_availability(booking_fetcher.get_court_bookings())
+    booking_fetcher = CourtBookingFetcher(target_date=date, for_indoors=for_indoors)
+    court_availabilities = booking_fetcher.get_court_availabilities()
 
     # wrapper.context.availability = court_availabilities
     return court_availabilities

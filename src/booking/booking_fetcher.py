@@ -185,7 +185,7 @@ class CourtBookingFetcher:
                     if not (
                         booking.end_time <= hour_start or booking.start_time >= hour_end
                     ):
-                        print(f"    Marking hour {current_hour} as booked")
+                        # print(f"    Marking hour {current_hour} as booked")
                         bookable_hours[current_hour] = False
 
                     current_time += timedelta(hours=1)
