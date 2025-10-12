@@ -54,11 +54,6 @@ SERVER_NAME = os.environ.get(ENV_VAR_NAME_SERVER_NAME, "127.0.0.1")
 OAUTH_GOOGLE_CLIENT_ID = os.environ.get("OAUTH_GOOGLE_CLIENT_ID")
 OAUTH_GOOGLE_CLIENT_SECRET = os.environ.get("OAUTH_GOOGLE_CLIENT_SECRET")
 
-print("✅ Tennis Booking Assistant is ready!")
-print("🌐 Opening web interface...")
-
-agent = BookingManager(OPENAI_API_KEY, LLM_MODEL_NAME)
-
 
 @cl.oauth_callback
 async def oauth_callback(
@@ -82,6 +77,10 @@ async def oauth_callback(
 
 @cl.on_chat_start
 async def on_chat_start():
+    agent = BookingManager(OPENAI_API_KEY, LLM_MODEL_NAME)
+    cl.user_session.set("agent", agent)
+    print("✅ Tennis Booking Assistant is ready!")
+
     user = cl.user_session.get("user")
     print(f"A new chat session has started for user {user.identifier}!")
     # await cl.Message(content="Willkommen zum Tennis Buchungsassistenten!").send()
@@ -105,6 +104,8 @@ async def set_starters():
 
 @cl.on_message
 async def on_message(message: cl.Message):
+    agent = cl.user_session.get("agent")
+
     user_message = message.content
     response, _ = await agent.run(user_message)
     await cl.Message(content=response).send()
