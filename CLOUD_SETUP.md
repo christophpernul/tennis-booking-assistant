@@ -24,17 +24,17 @@ We are using Google Cloud to deploy this application.
 2. Configure OAuth Consent Screen under "APIs & Services" (External)
 3. Create OAuth 2.0 Credentials for Web application with redirect URLs for the app
 4. Set environment variables `OAUTH_GOOGLE_CLIENT_ID` and `OAUTH_GOOGLE_CLIENT_SECRET`
-5. Use chainlit to create a environment variable `CHAINLIT_AUTH_SECRET` that is used to sign authentication tokens using `chainlit create-secret`
+5. Use chainlit to create an environment variable `CHAINLIT_AUTH_SECRET` that is used to sign authentication tokens using `chainlit create-secret`
 
 > The redirect URL of the OAUth secret needs to be changed whenever a new deployment is done!
 
 ### Image storage
 
 1. Enable Google Artifact Registry API to store your Docker images
-2. Create a Docker repository in Artifact Registry `europe-west3-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo`
+2. Create a Docker repository in Artifact Registry `europe-west1-docker.pkg.dev/tennis-booking-assistant/tennis-agent-repo`
 3. Authenticate Docker locally to use Google Artifact Registry:
    ```bash
-   gcloud auth configure-docker europe-west3-docker.pkg.dev
+   gcloud auth configure-docker europe-west1-docker.pkg.dev
    ```
 
 ## Manual Deployment

@@ -25,7 +25,7 @@ on:
 
 env:
   IMAGE_NAME: tennis-booking-assistant
-  GCP_REPO_NAME: tennis-app-repo
+  GCP_REPO_NAME: tennis-agent-repo
   GCP_PROJECT: tennis-booking-assistant
   GCP_REGION: europe-west1
 
