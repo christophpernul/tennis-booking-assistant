@@ -10,8 +10,9 @@
 # 1. GCP: Create service account in IAM & Admin > Service Accounts
 # 2. GCP: Grant "Artifact Registry Writer" role to the service account to be able to push the image
 # 3. GCP: Grant "Cloud Run Admin" role to the service account to be able to deploy the service
-# 4. GCP: Create and download JSON key for the service account
-# 5. GitHub: Add the JSON key as repository secret named 'GCP_SA_KEY'
+# 4. GCP: Grant "Service Account User" role to the service account to be able to act as the compute service account managing the service
+# 5. GCP: Create and download JSON key for the service account
+# 6. GitHub: Add the JSON key as repository secret named 'GCP_SA_KEY'
 
 
 name: Build and Push Docker Image to GCP

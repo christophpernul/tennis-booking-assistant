@@ -1,23 +1,45 @@
-# tennis-booking-assistant
+# Tennis Booking Assistant
 
 An AI agent that helps to find and book tennis courts.
 
-## Useful links
-- [openai-agents-python Docu](https://openai.github.io/openai-agents-python/)
-- [OpenAI Agents Docu](https://platform.openai.com/docs/guides/agents)
-- [OpenAI Traces](https://platform.openai.com/logs?api=traces)
--
+## Architecture
+
+The system includes the following pieces
+
+### Python Agent
+
+The Python implementation is modularized and contains
+- `src/agent`: Contains implementation of agent including tools using OpenAI Agent SDK
+- `src/booking`: Contains API to fetch latest court bookings and performs data cleaning and preparation tasks
+- `src/data`: Contains information and utility for court metadata
+
+The Python dependencies are managed with a `pyproject.toml` file and can easily be installed via `uv`.
+
+### User Interface
+
+The user interface is a simple `chainlit` application, that serves the agent. It is contained in `run.py`.
+
+### Cloud Deployment
+
+A `Dockerfile` is included in the respository, that sets up the necessary dependencies and runs the
+application. This Docker file is used for a deployment on Google Cloud.
+
+For this a project was created including an artifact registry. The Docker images are pushed from this repository
+to the registry via automatic CI/CD pipelines that allow for continuous deployment of the application.
+
+The latest image is automatically deployed in a `Google Cloud Run` service.
+
+### CI/CD Setup in GitHub
+
+The repository includes the following CI/CD pipelines:
+- `pre-commit`: Executes `pre-commit` hooks on new commits
+- `docker-gcp-deploy`: Builds a Docker image from the code, tags it properly, pushes it to GCP and deploys it with Google Cloud Run
+
 
 ## Technical setup
 
 The dependencies can be installed with `uv sync`.
 The agent is built using `openai` and `agents` frameworks and uses `gpt-4o-mini` as a default LLM model.
-
-## CI/CD Configuration
-
-The repository includes the following CI/CD pipelines:
-- `pre-commit`: Executes `pre-commit` hooks on new commits
-- `docker-build-push`: Builds a Docker image from the code, tags it properly, pushes it to GCP and deploys it with Google Cloud Run
 
 ### Quick Start
 
@@ -39,11 +61,11 @@ The repository includes the following CI/CD pipelines:
 
 4. **Run the application:**
    ```bash
-   python run.py
+   chainlit run run.py -w
    ```
 
 5. **Open your browser:**
-   Navigate to `http://localhost:7860` to access the Gradio interface.
+   Navigate to `http://localhost:8000` to access the Gradio interface.
 
 ### Project Structure
 
@@ -53,14 +75,19 @@ tennis-booking-assistant/
 │   ├── agent/           # AI agent logic
 │   ├── booking/         # STC booking system integration
 │   ├── data/           # Court data and user preferences
-│   ├── interface/      # Gradio web interface
 │   └── main.py         # Application entry point
 ├── run.py              # CLI launcher
 ├── test_setup.py       # Setup verification
 └── pyproject.toml      # Project configuration
 ```
 
-## Assistant Purpose
+### Useful links
+- [openai-agents-python Docu](https://openai.github.io/openai-agents-python/)
+- [OpenAI Agents Docu](https://platform.openai.com/docs/guides/agents)
+- [OpenAI Traces](https://platform.openai.com/logs?api=traces)
+-
+
+## Assistant Overview
 
 A user can ask a question to the AI assistant and gives him information about at which time, for how long and additional information
 he wants to play tennis. The agent processes this information and then fetches the current bookings from the STC booking system and
@@ -69,34 +96,21 @@ question and additional context information that is hard coded about the courts.
 the agent suggests other courts. If no courts are available for the time the user wants to play, the agent suggests a different time near
 to the time the user asked for.
 
-There is a gradio frontend that only shows a chatprompt, that ideally has the ability to get voice input. An additional HTML element is shown with the
-answer of the agent.
-
-## Assistant technical information
-
 The agent knows context about the courts. For each court the agent knows
 - the location of the court in the club
 - whether the court is a middle court or not
 - whether the court is only a single's court
+- whether the court is inside during Winter or not
 - the court type.
 
 Furthermore, the agent knows from the user question or for each user's name personal preferences for specific courts.
 
-The agent should answer very short and precise and give a nice list overview of the suggested courts and times for booking.
+### STC Booking System Integration
 
-## STC Booking System Integration
-
-The assistant integrates with the Sport- und Tennis-Club München Süd (STC) booking system via the eBuSy platform. The system fetches real-time court availability from:
+The assistant integrates with the Sport- und Tennis-Club München Süd (STC) booking system via the eBuSy platform.
+The system fetches real-time court availability from:
 
 **Booking System URL:** https://siemens-tennisclub-muenchenv8.ebusy.de/lite-module/891
-
-**Available Courts:**
-- **Platz A:** links, Aufschlagtrainingsplatz, Ballmaschinenplatz (nur Einzel)
-- **Platz 1-6:** links, Tennisschule (Platz 1-5 sind Mittelplätze)
-- **Platz 7-9:** Eingang rechts, Sandplätze (Platz 8 ist Mittelplatz)
-- **Platz 10-12:** Eingang rechts, Granulatplätze (Platz 11 ist Mittelplatz)
-- **T-Platz:** Mitte, vor dem Restaurant (nur Einzel)
-- **Platz 14-22:** hinten, Sandplätze (Platz 15, 18, 21 sind Mittelplätze, Platz 17 ist Wingfield)
 
 The system automatically:
 - Fetches current availability from the STC booking system
