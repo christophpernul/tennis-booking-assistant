@@ -26,8 +26,6 @@ We are using Google Cloud to deploy this application.
 4. Set environment variables `OAUTH_GOOGLE_CLIENT_ID` and `OAUTH_GOOGLE_CLIENT_SECRET`
 5. Use chainlit to create an environment variable `CHAINLIT_AUTH_SECRET` that is used to sign authentication tokens using `chainlit create-secret`
 
-> The redirect URL of the OAUth secret needs to be changed whenever a new deployment is done!
-
 ### Image storage
 
 1. Enable Google Artifact Registry API to store your Docker images
@@ -45,11 +43,11 @@ We are using Google Cloud to deploy this application.
    ```
 2. Tag your Docker image for Artifact Registry:
    ```bash
-   docker tag tennis-booking-assistant europe-west3-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo/tennis-booking-assistant:latest
+   docker tag tennis-booking-assistant europe-west1-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo/tennis-booking-assistant:latest
     ```
 3. Push your Docker image to Artifact Registry:
     ```bash
-    docker push europe-west3-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo/tennis-booking-assistant:latest
+    docker push europe-west1-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo/tennis-booking-assistant:latest
     ```
 
 4. Use the new image in Google Cloud Run to deploy a new container

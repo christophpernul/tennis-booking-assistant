@@ -9,22 +9,34 @@ from datetime import datetime, date, timedelta
 
 from src.booking.constants import (
     COURT_STC_ID_TO_INTERNAL_ID,
+    INDOOR_COURT_STC_ID_TO_INTERNAL_ID,
     COURT_INTERNAL_ID_TO_NAME,
     CourtBooking,
     CourtAvailability,
 )
 from src.utils.validation import validate_date
-from src.data.courts import get_court_names
+from src.data.courts import get_all_court_names
+
+EBUSY_STC_MUNICH_BASE_URL: str = "https://siemens-tennisclub-muenchenv8.ebusy.de"
 
 
 class CourtBookingFetcher:
     """Fetches all court bookings on a given date via the STC eBuSy booking system."""
 
-    def __init__(self, target_date: date | str):
+    def __init__(self, target_date: date | str, for_indoors: bool):
         self.target_date = self._parse_target_date(target_date)
+        self.for_indoors = for_indoors
+
+        if for_indoors:
+            self.court_stc_id_to_internal_id = INDOOR_COURT_STC_ID_TO_INTERNAL_ID
+        else:
+            self.court_stc_id_to_internal_id = COURT_STC_ID_TO_INTERNAL_ID
 
         raw_bookings = self._fetch_all_bookings()
         self.court_bookings = self._parse_court_bookings(raw_bookings)
+        self.court_availabilities = self.convert_bookings_to_availabilities(
+            self.court_bookings
+        )
 
     @staticmethod
     def _parse_target_date(target_date: date | str) -> str:
@@ -40,6 +52,12 @@ class CourtBookingFetcher:
             )
         return date_str
 
+    def _get_base_url(self) -> str:
+        if self.for_indoors:
+            return f"{EBUSY_STC_MUNICH_BASE_URL}/court-module/1736"
+        else:
+            return f"{EBUSY_STC_MUNICH_BASE_URL}/lite-module/891"
+
     def _fetch_all_bookings(self) -> dict:
         """
         Fetch court bookings for a specific target date.
@@ -47,8 +65,7 @@ class CourtBookingFetcher:
         Returns:
             Raw JSON data from the booking system
         """
-        base_url = "https://siemens-tennisclub-muenchenv8.ebusy.de"
-        url = f"{base_url}/lite-module/891?timestamp=&currentDate={self.target_date}"
+        url = f"{self._get_base_url()}?timestamp=&currentDate={self.target_date}"
 
         session = requests.Session()
         session.headers.update(
@@ -88,14 +105,13 @@ class CourtBookingFetcher:
             court_bookings.append(booking)
         return court_bookings
 
-    @staticmethod
-    def _convert_court_stc_id_to_name(stc_id: int) -> str:
+    def _convert_court_stc_id_to_name(self, stc_id: int) -> str:
         """
         Converts STC court IDs to internal ID and the resp. court's name.
         """
         court_stc_id_to_name_map = {
             stc_id: COURT_INTERNAL_ID_TO_NAME[internal_id]
-            for stc_id, internal_id in COURT_STC_ID_TO_INTERNAL_ID.items()
+            for stc_id, internal_id in self.court_stc_id_to_internal_id.items()
         }
         return court_stc_id_to_name_map[stc_id]
 
@@ -135,52 +151,56 @@ class CourtBookingFetcher:
     def get_court_bookings(self) -> list[CourtBooking]:
         return self.court_bookings.copy()
 
+    def get_court_availabilities(self) -> list[CourtAvailability]:
+        return self.court_availabilities.copy()
 
-def convert_to_availability(bookings: list[CourtBooking]) -> list[CourtAvailability]:
-    """
-    Convert court bookings to availability structure.
+    def convert_bookings_to_availabilities(
+        self, bookings: list[CourtBooking]
+    ) -> list[CourtAvailability]:
+        """
+        Convert court bookings to availability structure.
 
-    Args:
-        bookings: List of CourtBooking objects
+        Args:
+            bookings: List of CourtBooking objects
 
-    Returns:
-        Dictionary with court names as keys and hour->availability mapping as values
-        True means available, False means booked
-    """
-    all_court_availabilities = []
+        Returns:
+            Dictionary with court names as keys and hour->availability mapping as values
+            True means available, False means booked
+        """
+        all_court_availabilities = []
 
-    all_court_names = set(get_court_names())
-    for court_name in sorted(all_court_names):
-        print(f"Processing court: {court_name}")
-        bookable_hours = {hour: True for hour in range(7, 22)}
-        court_bookings = [b for b in bookings if b.court_name == court_name]
-        for booking in court_bookings:
-            # print(f"  Booking from {booking.start_time} to {booking.end_time}")
-            current_time = booking.start_time
-            while current_time < booking.end_time:
-                current_hour = current_time.hour
+        all_court_names = set(get_all_court_names(for_indoors=self.for_indoors))
+        for court_name in sorted(all_court_names):
+            print(f"Processing court: {court_name}")
+            bookable_hours = {hour: True for hour in range(7, 22)}
+            court_bookings = [b for b in bookings if b.court_name == court_name]
+            for booking in court_bookings:
+                # print(f"  Booking from {booking.start_time} to {booking.end_time}")
+                current_time = booking.start_time
+                while current_time < booking.end_time:
+                    current_hour = current_time.hour
 
-                hour_start = current_time
-                hour_end = current_time + timedelta(hours=1)
-                if not (
-                    booking.end_time <= hour_start or booking.start_time >= hour_end
-                ):
-                    print(f"    Marking hour {current_hour} as booked")
-                    bookable_hours[current_hour] = False
+                    hour_start = current_time
+                    hour_end = current_time + timedelta(hours=1)
+                    if not (
+                        booking.end_time <= hour_start or booking.start_time >= hour_end
+                    ):
+                        # print(f"    Marking hour {current_hour} as booked")
+                        bookable_hours[current_hour] = False
 
-                current_time += timedelta(hours=1)
-        court_availability = CourtAvailability(
-            court_name=court_name, availability=bookable_hours
-        )
-        all_court_availabilities.append(court_availability)
+                    current_time += timedelta(hours=1)
+            court_availability = CourtAvailability(
+                court_name=court_name, availability=bookable_hours
+            )
+            all_court_availabilities.append(court_availability)
 
-    return all_court_availabilities
+        return all_court_availabilities
 
 
 # Global instance for easy access
 if __name__ == "__main__":
-    stc_client = CourtBookingFetcher(date.today())
+    stc_client = CourtBookingFetcher(target_date=date.today(), for_indoors=False)
     bookings = stc_client.get_court_bookings()
-    avails = convert_to_availability(bookings)
+    avails = stc_client.get_court_availabilities()
     print(bookings)
     print(avails)
