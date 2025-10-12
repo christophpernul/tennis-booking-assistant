@@ -9,6 +9,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 import chainlit as cl
+from chainlit.user import User
 
 
 def load_environment():
@@ -43,36 +44,63 @@ if not check_requirements():
     sys.exit(1)
 
 # Get OpenAI API key and model name
-openai_api_key = os.getenv(ENV_VAR_NAME_OPENAI_API_KEY)
-openai_model = os.getenv(ENV_VAR_NAME_MODEL_NAME, "gpt-4o-mini")
-# Get port from environment variable (Cloud Run uses PORT=8080)
-port = int(os.environ.get(ENV_VAR_NAME_SERVER_PORT, 7860))
+OPENAI_API_KEY = os.getenv(ENV_VAR_NAME_OPENAI_API_KEY)
+LLM_MODEL_NAME = os.getenv(ENV_VAR_NAME_MODEL_NAME, "gpt-4o-mini")
+# Get port from environment variable
+SERVER_PORT = int(os.environ.get(ENV_VAR_NAME_SERVER_PORT, 8000))
 # Get server name (0.0.0.0 for Cloud Run, 127.0.0.1 for local)
-server_name = os.environ.get(ENV_VAR_NAME_SERVER_NAME, "127.0.0.1")
+SERVER_NAME = os.environ.get(ENV_VAR_NAME_SERVER_NAME, "127.0.0.1")
+
+OAUTH_GOOGLE_CLIENT_ID = os.environ.get("OAUTH_GOOGLE_CLIENT_ID")
+OAUTH_GOOGLE_CLIENT_SECRET = os.environ.get("OAUTH_GOOGLE_CLIENT_SECRET")
 
 print("✅ Tennis Booking Assistant is ready!")
 print("🌐 Opening web interface...")
 
-agent = BookingManager(openai_api_key, openai_model)
+agent = BookingManager(OPENAI_API_KEY, LLM_MODEL_NAME)
+
+
+@cl.oauth_callback
+async def oauth_callback(
+    provider_id: str,
+    token: str,
+    raw_user_data: dict,
+    default_user: User,
+) -> User:
+    """
+    This function is called when the user successfully authenticates.
+    Customize user data and metadata here.
+    """
+    print("OAuth callback called!")
+    # You can add custom logic here to:
+    # - Store user in your database
+    # - Add custom metadata
+    # - Implement role-based access control
+
+    return default_user
 
 
 @cl.on_chat_start
 async def on_chat_start():
-    # TODO: Starters not working!
-    # starters = [
-    #     cl.Starter(
-    #         label="Heute 18 Uhr",
-    #         message="Gibt es heute um 18 Uhr verfügbare Plätze?",
-    #         icon="/public/write.svg",
-    #     ),
-    #     cl.Starter(
-    #         label="Freie Hallenplätze am Abend",
-    #         message="Gibt es in den nächsten drei Tagen freie Plätze in der Halle ab 18 Uhr?",
-    #         icon="/public/write.svg",
-    #     ),
-    # ]
-    # cl.user_session.set("starters", starters)
-    await cl.Message(content="Willkommen zum Tennis Buchungsassistenten!").send()
+    user = cl.user_session.get("user")
+    print(f"A new chat session has started for user {user.identifier}!")
+    # await cl.Message(content="Willkommen zum Tennis Buchungsassistenten!").send()
+
+
+@cl.set_starters
+async def set_starters():
+    return [
+        cl.Starter(
+            label="Heute 18 Uhr",
+            message="Gibt es heute um 18 Uhr verfügbare Plätze?",
+            # icon="/public/write.svg",
+        ),
+        cl.Starter(
+            label="Freie Hallenplätze am Abend",
+            message="Gibt es in den nächsten drei Tagen freie Plätze in der Halle ab 18 Uhr?",
+            # icon="/public/write.svg",
+        ),
+    ]
 
 
 @cl.on_message

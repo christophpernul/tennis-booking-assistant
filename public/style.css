@@ -1,0 +1,9 @@
+/* Hide the logo text */
+#app-header {
+    display: none;
+}
+
+/* Or more specifically target just the logo */
+.logo {
+    display: none;
+}

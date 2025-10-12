@@ -12,13 +12,27 @@ We are using Google Cloud to deploy this application.
 
 ## Steps to Deploy
 
+### Authentication
+
+**Authentication at OpenAI**
 1. Enable Google Secret Manager API
 2. Store `OPENAI_API_KEY` in Google Secret Manager
    1. Grant role `Secret Manager Secret Accessor` to default compute service account
-3. Enable Google Artifact Registry API to store your Docker images
-4. Create a Docker repository in Artifact Registry `europe-west3-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo`
-5. Download and install Docker Desktop
-6. Authenticate Docker to use Google Artifact Registry:
+
+**User management via Google**
+1. Enable `Google+` API
+2. Configure OAuth Consent Screen under "APIs & Services" (External)
+3. Create OAuth 2.0 Credentials for Web application with redirect URLs for the app
+4. Set environment variables `OAUTH_GOOGLE_CLIENT_ID` and `OAUTH_GOOGLE_CLIENT_SECRET`
+5. Use chainlit to create a environment variable `CHAINLIT_AUTH_SECRET` that is used to sign authentication tokens using `chainlit create-secret`
+
+> The redirect URL of the OAUth secret needs to be changed whenever a new deployment is done!
+
+### Image storage
+
+1. Enable Google Artifact Registry API to store your Docker images
+2. Create a Docker repository in Artifact Registry `europe-west3-docker.pkg.dev/tennis-booking-assistant/tennis-app-repo`
+3. Authenticate Docker locally to use Google Artifact Registry:
    ```bash
    gcloud auth configure-docker europe-west3-docker.pkg.dev
    ```
