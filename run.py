@@ -38,6 +38,16 @@ from src.constants import (
 from src.utils.validation import check_requirements
 from src.agent.openai_agent.agent import BookingManager
 
+WELCOME_TEXT: str = (
+    "**Willkommen zum Tennis Buchungsassistenten!**\n\n"
+    "Frage nach freien Plätzen im STC München...\n\n"
+    "_Beispiele_\n"
+    "Ich möchte heute um 18 Uhr am T-Platz spielen.\n"
+    "Ich suche freie Hallenplätze für morgen Abend ab 19 Uhr."
+)
+
+############################### START CODE ##########################################
+
 load_environment()
 
 if not check_requirements():
@@ -83,23 +93,7 @@ async def on_chat_start():
 
     user = cl.user_session.get("user")
     print(f"A new chat session has started for user {user.identifier}!")
-    # await cl.Message(content="Willkommen zum Tennis Buchungsassistenten!").send()
-
-
-@cl.set_starters
-async def set_starters():
-    return [
-        cl.Starter(
-            label="Heute 18 Uhr",
-            message="Gibt es heute um 18 Uhr verfügbare Plätze?",
-            # icon="/public/write.svg",
-        ),
-        cl.Starter(
-            label="Freie Hallenplätze am Abend",
-            message="Gibt es in den nächsten drei Tagen freie Plätze in der Halle ab 18 Uhr?",
-            # icon="/public/write.svg",
-        ),
-    ]
+    await cl.Message(content=WELCOME_TEXT).send()
 
 
 @cl.on_message
