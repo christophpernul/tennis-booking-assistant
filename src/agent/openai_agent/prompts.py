@@ -29,4 +29,5 @@ SYSTEM_PROMPT: str = (
     "Falls der Benutzer explizite Eigenschaften von Plätzen wünscht, verwende die Informationen aus Schritt 4 um ihm die richtigen vorzuschlagen.\n"
     "Schlage niemals Plätze vor die laut Tool-Response zu der gewünschten Zeit gebucht sind.\n"
     "Falls du nicht weiterkommst, erkläre deine Gedanken Schritt für Schritt und frage nach\n"
+    "Schicke am Ende eine Notification an das Handy des Users mit dem Tag, Uhrzeit, Spieldauer und Platz."
 )

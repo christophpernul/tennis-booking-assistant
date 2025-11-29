@@ -16,6 +16,7 @@ from src.agent.openai_agent.prompts import SYSTEM_PROMPT
 from src.agent.openai_agent.tools import (
     get_court_availability_tool,
     get_court_attributes_tool,
+    push_notification_tool,
 )
 
 
@@ -45,6 +46,7 @@ class OpenAIAgent:
             tools=[
                 get_court_availability_tool,
                 get_court_attributes_tool,
+                push_notification_tool,
             ],
         )
         self.session = SQLiteSession(trace_id)
