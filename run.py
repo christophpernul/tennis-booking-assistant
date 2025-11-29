@@ -34,6 +34,7 @@ from src.constants import (
     ENV_VAR_NAME_SERVER_PORT,
     ENV_VAR_NAME_MODEL_NAME,
     ENV_VAR_NAME_OPENAI_API_KEY,
+    ENV_VAR_NAME_GOOGLE_API_KEY,
 )
 from src.utils.validation import check_requirements
 from src.agent.openai_agent.agent import BookingManager
@@ -55,14 +56,24 @@ if not check_requirements():
 
 # Get OpenAI API key and model name
 OPENAI_API_KEY = os.getenv(ENV_VAR_NAME_OPENAI_API_KEY)
+GEMINI_API_KEY = os.getenv(ENV_VAR_NAME_GOOGLE_API_KEY)
 LLM_MODEL_NAME = os.getenv(ENV_VAR_NAME_MODEL_NAME, "gpt-4o-mini")
+
 # Get port from environment variable
 SERVER_PORT = int(os.environ.get(ENV_VAR_NAME_SERVER_PORT, 8000))
 # Get server name (0.0.0.0 for Cloud Run, 127.0.0.1 for local)
 SERVER_NAME = os.environ.get(ENV_VAR_NAME_SERVER_NAME, "127.0.0.1")
 
+GEMINI_API_BASE_URL = os.environ.get("GEMINI_API_BASE_URL")
 OAUTH_GOOGLE_CLIENT_ID = os.environ.get("OAUTH_GOOGLE_CLIENT_ID")
 OAUTH_GOOGLE_CLIENT_SECRET = os.environ.get("OAUTH_GOOGLE_CLIENT_SECRET")
+
+if LLM_MODEL_NAME.startswith("gpt"):
+    API_KEY: str = OPENAI_API_KEY
+    BASE_URL = None
+elif LLM_MODEL_NAME.startswith("gemini"):
+    API_KEY: str = GEMINI_API_KEY
+    BASE_URL = GEMINI_API_BASE_URL
 
 
 @cl.oauth_callback
@@ -87,7 +98,7 @@ async def oauth_callback(
 
 @cl.on_chat_start
 async def on_chat_start():
-    agent = BookingManager(OPENAI_API_KEY, LLM_MODEL_NAME)
+    agent = BookingManager(API_KEY, LLM_MODEL_NAME, llm_api_base_url=BASE_URL)
     cl.user_session.set("agent", agent)
     print("✅ Tennis Booking Assistant is ready!")
 

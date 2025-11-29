@@ -2,7 +2,15 @@
 Tennis booking AI agent that processes user requests and suggests available courts.
 """
 
-from agents import Agent, Runner, SQLiteSession, trace, gen_trace_id
+from openai import AsyncOpenAI
+from agents import (
+    Agent,
+    Runner,
+    SQLiteSession,
+    trace,
+    gen_trace_id,
+    OpenAIChatCompletionsModel,
+)
 
 from src.agent.openai_agent.prompts import SYSTEM_PROMPT
 from src.agent.openai_agent.tools import (
@@ -12,12 +20,27 @@ from src.agent.openai_agent.tools import (
 
 
 class OpenAIAgent:
-    def __init__(self, trace_id: str, openai_api_key: str, openai_model: str):
-        # self.context = BookingContext(availability=[])
-        # self.agent = Agent[BookingContext](
+    def __init__(
+        self,
+        trace_id: str,
+        llm_api_key: str,
+        llm_name: str,
+        llm_api_base_url: str = None,
+    ):
+        if llm_name.startswith("gpt"):
+            model = llm_name
+        elif llm_name.startswith("gemini"):
+            gemini_client = AsyncOpenAI(base_url=llm_api_base_url, api_key=llm_api_key)
+            model = OpenAIChatCompletionsModel(
+                model=llm_name, openai_client=gemini_client
+            )
+        else:
+            raise RuntimeError(
+                f"Model not known, make sure it is either an OpenAI or a Gemini model, got: {llm_name}"
+            )
         self.agent = Agent(
             name="BookingRecommender",
-            model=openai_model,
+            model=model,
             instructions=self._get_system_message(),
             tools=[
                 get_court_availability_tool,
@@ -46,12 +69,13 @@ class OpenAIAgent:
 class BookingManager:
     """AI agent for tennis court booking assistance."""
 
-    def __init__(self, openai_api_key: str, openai_model: str):
+    def __init__(self, llm_api_key: str, llm_name: str, llm_api_base_url: str = None):
         self.trace_id = gen_trace_id()
         self.openai_agent = OpenAIAgent(
             trace_id=self.trace_id,
-            openai_api_key=openai_api_key,
-            openai_model=openai_model,
+            llm_api_key=llm_api_key,
+            llm_name=llm_name,
+            llm_api_base_url=llm_api_base_url,
         )
 
     async def run(
