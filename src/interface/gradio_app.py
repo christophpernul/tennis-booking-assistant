@@ -19,20 +19,6 @@ class TennisBookingInterface:
         """Create the Gradio interface."""
         with gr.Blocks(
             title="Tennis Buchungsassistent",
-            theme=gr.themes.Soft(),
-            css="""
-            .chat-container {
-                max-height: 600px;
-                overflow-y: auto;
-            }
-            .response-container {
-                background-color: #f8f9fa;
-                border-radius: 10px;
-                padding: 15px;
-                margin: 10px 0;
-                border-left: 4px solid #007bff;
-            }
-            """,
         ) as interface:
 
             gr.Markdown(
